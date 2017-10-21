@@ -4,4 +4,8 @@
     <string name="activity_main_menu_1">Select Connection</string>
     <string name="activity_main_menu_2">Menu 2</string>
     <string name="ok">ok</string>
+    <string name="title_select_connection">Select Connection</string>
+    <string name="title_input_connection">Input Connection Data</string>
+    <string name="title_choose_test">Choose Test Suite</string>
+    <string name="title_test_assist">Test Assist</string>
 </resources>

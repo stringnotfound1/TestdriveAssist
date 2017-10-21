@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.esa.beuth.testdriveassist.ConnectionOverviewActivity">
+    tools:context="com.esa.beuth.testdriveassist.ConnectActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,10 +16,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:id="@+id/sv_activity_connection_overview">
+            android:id="@+id/sv_activity_connect">
 
             <LinearLayout
-                android:id="@+id/ll_activity_connection_overview"
+                android:id="@+id/ll_activity_connect"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -29,13 +29,14 @@
         </ScrollView>
 
         <TextView
-            android:id="@+id/tv_activity_connection_overview_ok"
+            android:id="@+id/tv_activity_connect_ok"
             style="@style/TextViewButton"
             android:text="@string/ok"/>
         <TextView
-            android:id="@+id/tv_activity_connection_overview_test_list"
+            android:id="@+id/tv_activity_connect_test"
             style="@style/TextViewButton"
             android:text="Test List View"/>
 
     </LinearLayout>
-</RelativeLayout>
+
+</LinearLayout>

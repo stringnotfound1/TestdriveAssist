@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.esa.beuth.testdriveassist.ConnectionOverviewActivity">
+    android:orientation="vertical"
+    tools:context="com.esa.beuth.testdriveassist.TestSuiteOverviewActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:id="@+id/sv_activity_connection_overview">
+            android:id="@+id/sv_activity_test_suite_overview">
 
             <LinearLayout
-                android:id="@+id/ll_activity_connection_overview"
+                android:id="@+id/ll_activity_test_suite_overview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -28,14 +28,12 @@
             </LinearLayout>
         </ScrollView>
 
-        <TextView
-            android:id="@+id/tv_activity_connection_overview_ok"
-            style="@style/TextViewButton"
-            android:text="@string/ok"/>
-        <TextView
-            android:id="@+id/tv_activity_connection_overview_test_list"
-            style="@style/TextViewButton"
-            android:text="Test List View"/>
 
+        <TextView
+            android:id="@+id/tv_activity_test_suite_overview"
+            style="@style/TextViewButton"
+            android:layout_width="match_parent"
+            android:text="@string/ok" />
     </LinearLayout>
-</RelativeLayout>
+
+</LinearLayout>

@@ -26,6 +26,8 @@ public class ConnectionOverviewActivity extends AppCompatActivity implements Vie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connection_overview);
 
+        setTitle(getString(R.string.title_select_connection));
+
         tvOk = (TextView) findViewById(R.id.tv_activity_connection_overview_ok);
         tvTest = (TextView) findViewById(R.id.tv_activity_connection_overview_test_list);
 
@@ -47,6 +49,11 @@ public class ConnectionOverviewActivity extends AppCompatActivity implements Vie
 
             case R.id.tv_activity_connection_overview_ok:{
 
+                /* Check for checked Checkboxes and use Intent to send data to next activity */
+                intent = new Intent(this, ConnectActivity.class);
+                intent.putExtra("EXTRA_ID","extra");
+                startActivity(intent);
+
                 break;
             }
 
@@ -60,7 +67,7 @@ public class ConnectionOverviewActivity extends AppCompatActivity implements Vie
                 CustomConnectionOverviewElement customElement = new CustomConnectionOverviewElement(this);
                 customElement.setText("This is a test "+customElement.isChecked());
                 llConnections.addView(customElement);
-                
+
             }
         }
 
