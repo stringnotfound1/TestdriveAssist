@@ -15,6 +15,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".gui.AppActivity"
+            android:label="@string/title_activity_app"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ConnectionOverviewActivity"></activity>
     </application>
 
 </manifest>
