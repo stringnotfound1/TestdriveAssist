@@ -7,7 +7,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+import com.esa.beuth.testdriveassist.client.Client;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ImageView ivMenu1;
     private ImageView ivMenu2;
@@ -30,15 +32,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent;
 
 
-        switch (v.getId()){
-            case R.id.iv_activity_main_menu_1:{
-                Toast.makeText(this,"Test", Toast.LENGTH_SHORT);
+        switch (v.getId()) {
+            case R.id.iv_activity_main_menu_1: {
                 intent = new Intent(this, ConnectionOverviewActivity.class);
                 startActivity(intent);
                 break;
             }
 
-            case R.id.iv_activity_main_menu_2:{
+            case R.id.iv_activity_main_menu_2: {
                 break;
             }
         }
