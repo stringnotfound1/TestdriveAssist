@@ -8,10 +8,15 @@ import android.widget.TextView;
 
 import com.esa.beuth.testdriveassist.R;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 /**
  * Created by Alex on 21.10.2017.
  */
 
+@Data
 public class CustomConnectVarElement extends LinearLayout {
 
     private TextView tvVarName;
