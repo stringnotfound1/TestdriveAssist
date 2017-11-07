@@ -9,10 +9,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.esa.beuth.testdriveassist.client.Client;
+import com.berner.mattner.tools.networking.client.Client;
 import com.esa.beuth.testdriveassist.gui.CustomConnectVarElement;
 
-public class ConnectActivity extends AppCompatActivity implements View.OnClickListener {
+import lombok.NonNull;
+
+public class ConnectActivity extends AppCompatActivity {
 
     private LinearLayout llVarList;
     private TextView tvOk;
@@ -28,59 +30,42 @@ public class ConnectActivity extends AppCompatActivity implements View.OnClickLi
 
         setTitle(getString(R.string.title_input_connection));
 
-        llVarList = (LinearLayout) findViewById(R.id.ll_activity_connect);
-        tvOk = (TextView) findViewById(R.id.tv_activity_connect_ok);
-        tvTest = (TextView) findViewById(R.id.tv_activity_connect_test);
+        llVarList = findViewById(R.id.ll_activity_connect);
+        tvOk = findViewById(R.id.tv_activity_connect_ok);
+        tvTest = findViewById(R.id.tv_activity_connect_test);
 
-        tvOk.setOnClickListener(this);
-        tvTest.setOnClickListener(this);
+        tvOk.setOnClickListener(this::connectClicked);
+        tvTest.setOnClickListener(this::testClicked);
     }
 
-    @Override
-    public void onClick(View v) {
-
-        Intent intent;
-
-        switch (v.getId()) {
-
-            case R.id.tv_activity_connect_ok: {
-                Client client = new Client();
-                client.setOnInput((length, bytes) -> {
-                    String input = new String(bytes, 0, length);
-                    if (!inputText.equals(input)) {
-                        if (inputToast != null)
-                            inputToast.cancel();
-                        inputToast = Toast.makeText(getApplicationContext(), input, Toast.LENGTH_SHORT);
-                        inputToast.show();
-                    }
-                });
-                new Thread(() -> {
-                    Looper.prepare();
-                    try {
-                        client.start("192.168.43.11", 60000);
-                        Toast.makeText(getApplicationContext(), "client started", Toast.LENGTH_SHORT).show();
-                    } catch (Exception e) {
-                        Toast.makeText(getApplicationContext(), "error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
-                    }
-                }).start();
-
-                intent = new Intent(this, TestSuiteOverviewActivity.class);
-                startActivity(intent);
-
-                break;
+    private void connectClicked(final @NonNull View view) {
+        Client client = new Client();
+        client.setOnInput((length, bytes) -> {
+            String input = new String(bytes, 0, length);
+            if (!inputText.equals(input)) {
+                if (inputToast != null)
+                    inputToast.cancel();
+                inputToast = Toast.makeText(getApplicationContext(), input, Toast.LENGTH_SHORT);
+                inputToast.show();
             }
-            case R.id.tv_activity_connect_test: {
-
-                CustomConnectVarElement customElement = new CustomConnectVarElement(this);
-                customElement.setText("Test");
-                llVarList.addView(customElement);
-
-                break;
+        });
+        new Thread(() -> {
+            Looper.prepare();
+            try {
+                client.start("192.168.43.11", 60000);
+                Toast.makeText(getApplicationContext(), "client started", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                Toast.makeText(getApplicationContext(), "error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
             }
+        }).start();
 
-        }
+        startActivity(new Intent(this, TestSuiteOverviewActivity.class));
+    }
 
-
+    private void testClicked(final @NonNull View view) {
+        CustomConnectVarElement customElement = new CustomConnectVarElement(this);
+        customElement.setText("Test");
+        llVarList.addView(customElement);
     }
 }

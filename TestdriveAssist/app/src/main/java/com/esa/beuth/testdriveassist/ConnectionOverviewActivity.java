@@ -1,19 +1,20 @@
 package com.esa.beuth.testdriveassist;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.esa.beuth.testdriveassist.gui.CustomConnectionOverviewElement;
 
 import java.util.List;
 
-public class ConnectionOverviewActivity extends AppCompatActivity implements View.OnClickListener{
+import lombok.NonNull;
+
+public class ConnectionOverviewActivity extends AppCompatActivity {
 
     private TextView tvOk;
     private TextView tvTest;
@@ -28,48 +29,27 @@ public class ConnectionOverviewActivity extends AppCompatActivity implements Vie
 
         setTitle(getString(R.string.title_select_connection));
 
-        tvOk = (TextView) findViewById(R.id.tv_activity_connection_overview_ok);
-        tvTest = (TextView) findViewById(R.id.tv_activity_connection_overview_test_list);
+        tvOk = findViewById(R.id.tv_activity_connection_overview_ok);
+        tvTest = findViewById(R.id.tv_activity_connection_overview_test_list);
 
-        llConnections = (LinearLayout) findViewById((R.id.ll_activity_connection_overview));
+        llConnections = findViewById((R.id.ll_activity_connection_overview));
 
-        tvOk.setOnClickListener(this);
-        tvTest.setOnClickListener(this);
+        tvOk.setOnClickListener(this::okClicked);
+        tvTest.setOnClickListener(this::testClicked);
 
         inflater = getLayoutInflater();
-
     }
 
-    @Override
-    public void onClick(View v) {
+    private void okClicked(final @NonNull View view) {
+         /* Check for checked Checkboxes and use Intent to send data to next activity */
+        Intent intent = new Intent(this, ConnectActivity.class);
+        intent.putExtra("EXTRA_ID", "extra");
+        startActivity(intent);
+    }
 
-        Intent intent;
-
-        switch(v.getId()){
-
-            case R.id.tv_activity_connection_overview_ok:{
-
-                /* Check for checked Checkboxes and use Intent to send data to next activity */
-                intent = new Intent(this, ConnectActivity.class);
-                intent.putExtra("EXTRA_ID","extra");
-                startActivity(intent);
-
-                break;
-            }
-
-            case R.id.tv_activity_connection_overview_test_list:{
-
-                /* Test for ScrollView */
-//                View customElement = inflater.inflate(R.layout.custom_connection_overview_list_element, null);
-//                TextView tvConnectionName = (TextView) customElement.findViewById(R.id.tv_custom_overview_list_element);
-//                tvConnectionName.setText("Placeholder");
-
-                CustomConnectionOverviewElement customElement = new CustomConnectionOverviewElement(this);
-                customElement.setText("This is a test "+customElement.isChecked());
-                llConnections.addView(customElement);
-
-            }
-        }
-
+    private void testClicked(final @NonNull View view) {
+        CustomConnectionOverviewElement customElement = new CustomConnectionOverviewElement(this);
+        customElement.setText("This is a test " + customElement.isChecked());
+        llConnections.addView(customElement);
     }
 }
