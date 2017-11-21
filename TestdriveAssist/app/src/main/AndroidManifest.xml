@@ -3,6 +3,7 @@
     package="com.esa.beuth.testdriveassist">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -23,7 +24,8 @@
         <activity android:name=".ConnectionOverviewActivity" />
         <activity android:name=".ConnectActivity" />
         <activity android:name=".TestSuiteOverviewActivity" />
-        <activity android:name=".TestAssistActivity"></activity>
+        <activity android:name=".TestAssistActivity" />
+        <activity android:name=".TestActivity"></activity>
     </application>
 
 </manifest>
