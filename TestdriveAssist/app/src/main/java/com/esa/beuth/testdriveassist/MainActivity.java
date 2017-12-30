@@ -20,7 +20,8 @@ public class MainActivity extends AppCompatActivity {
         ivMenu2 = findViewById(R.id.iv_activity_main_menu_2);
 
         ivMenu1.setOnClickListener(view -> startActivity(new Intent(this, ConnectionOverviewActivity.class)));
-        ivMenu2.setOnClickListener(this::bla);
+//        ivMenu2.setOnClickListener(this::bla);
+        ivMenu2.setOnClickListener(view -> startActivity(new Intent(this,TestActivity.class)));
     }
 
     private void bla(View view){
