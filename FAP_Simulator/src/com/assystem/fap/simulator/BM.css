@@ -1,0 +1,63 @@
+.pressedOverlay {
+	-fx-background-color: green,
+		linear-gradient(to bottom, derive(green, 60.0%) 5.0%, derive(green, 90.0%)
+		40.0%);
+}
+
+.errorOverlay {
+	-fx-background-color: red, linear-gradient(to bottom, derive(red, 60.0%)
+		5.0%, derive(red, 90.0%) 40.0%);
+}
+
+.root {
+	-fx-base: rgb(29.0, 29.0, 27.0);
+	-fx-background: rgb(54.0, 54.0, 52.0);
+	-fx-control-inner-background: rgb(115.0, 115.0, 113.0);
+	-fx-text-fill: rgb(193.0, 193.0, 191.0);
+}
+
+#menuTranslationButton:focused {
+	-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; 
+    -fx-background-insets: 0.0, 1.0, 2.0;
+    -fx-background-radius: 3.0, 2.0, 1.0;
+}
+
+#workingTabPane .tab-header-area {
+	-fx-padding: 0.0 27.0 0.0 25.0;
+}
+
+.label {
+	-fx-text-fill: white;
+}
+
+.titled-pane *.content{
+	-fx-background-color: rgb(29.0, 29.0, 27.0);
+}
+
+.text-input {
+    -fx-text-fill: -fx-text-inner-color;
+    -fx-highlight-fill: derive(-fx-control-inner-background,-20.0%);
+    -fx-highlight-text-fill: -fx-text-inner-color;
+    -fx-prompt-text-fill: rgba(255.0, 255.0,255.0,0.4);
+    -fx-background-color: linear-gradient(to bottom, derive(-fx-text-box-border, -10.0%), -fx-text-box-border),
+        linear-gradient(from 0.0px 0.0px to 0.0px 5.0px, derive(-fx-control-inner-background, -9.0%), -fx-control-inner-background);
+    -fx-background-insets: 0.0, 1.0;
+    -fx-background-radius: 3.0, 2.0;
+    -fx-cursor: text;
+    -fx-padding: 0.333333em 0.583em 0.333333em 0.583em; /* 4 7 4 7 */
+    
+    -fx-font-family: Segoe UI;
+    -fx-font-style: italic;
+    -fx-text-fill: white;
+}
+
+.chart-legend {
+   -fx-background-color:  transparent;
+}
+
+.axis-tick-mark {
+    -fx-stroke: white;
+}
+.axis-minor-tick-mark {
+    -fx-stroke: white;
+}
