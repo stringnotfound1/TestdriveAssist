@@ -8,4 +8,7 @@
     <string name="title_input_connection">Input Connection Data</string>
     <string name="title_choose_test">Choose Test Suite</string>
     <string name="title_test_assist">Test Assist</string>
+    <string name="permission_storage">please grant storage permission to enable read/write of test files</string>
+    <string name="ip_address">IP Address</string>
+    <string name="port">Port</string>
 </resources>

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,9 +17,15 @@ import lombok.NonNull;
 
 public class ConnectActivity extends AppCompatActivity {
 
+    private static final String TAG = "ConnectActivity";
+
     private LinearLayout llVarList;
     private TextView tvOk;
     private TextView tvTest;
+
+    private TextView tvIP;
+    private TextView tvPort;
+
 
     private Toast inputToast = null;
     private String inputText = "";
@@ -34,17 +41,26 @@ public class ConnectActivity extends AppCompatActivity {
         tvOk = findViewById(R.id.tv_activity_connect_ok);
         tvTest = findViewById(R.id.tv_activity_connect_test);
 
+        tvIP = findViewById(R.id.tv_activity_connect_IP);
+        tvPort = findViewById(R.id.tv_activity_connect_port);
+
         tvOk.setOnClickListener(this::connectClicked);
         tvTest.setOnClickListener(this::testClicked);
+
+        Toast.makeText(getApplicationContext(), "client started", Toast.LENGTH_SHORT).show();
+
     }
 
     private void connectClicked(final @NonNull View view) {
         Client client = new Client();
+        Log.d(TAG,"Try connection");
         client.setOnInput((length, bytes) -> {
+
             String input = new String(bytes, 0, length);
             if (!inputText.equals(input)) {
                 if (inputToast != null)
                     inputToast.cancel();
+                Log.d(TAG,"Data: "+input);
                 inputToast = Toast.makeText(getApplicationContext(), input, Toast.LENGTH_SHORT);
                 inputToast.show();
             }
@@ -52,11 +68,15 @@ public class ConnectActivity extends AppCompatActivity {
         new Thread(() -> {
             Looper.prepare();
             try {
-                client.start("192.168.43.11", 60000);
+                Log.d(TAG,"Try connection");
+//                client.start("192.168.43.11", 60000);
+                client.start(tvIP.getText().toString(), Integer.parseInt(tvPort.getText().toString()));
                 Toast.makeText(getApplicationContext(), "client started", Toast.LENGTH_SHORT).show();
+                Log.d(TAG,"Connection success?");
             } catch (Exception e) {
                 Toast.makeText(getApplicationContext(), "error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
+                Log.e(TAG, "Connection Error");
             }
         }).start();
 

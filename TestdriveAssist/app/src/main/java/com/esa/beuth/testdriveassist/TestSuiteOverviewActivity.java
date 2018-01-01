@@ -1,13 +1,27 @@
 package com.esa.beuth.testdriveassist;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.esa.beuth.testdriveassist.Global.Static;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
 public class TestSuiteOverviewActivity extends AppCompatActivity {
 
+
+    static final String TAG = "TestSuiteOverview";
     private LinearLayout llTestSuiteList;
     private TextView tvOk;
 
@@ -25,4 +39,19 @@ public class TestSuiteOverviewActivity extends AppCompatActivity {
 
 
     }
+
+    private void listTestSuites(){
+
+        File xmlDir = new File(Static.FILEPATH+Static.XMLPATH);
+
+        for (File f : xmlDir.listFiles()){
+            if(f.getPath().endsWith("xml")){
+                Log.d(TAG, f.getAbsolutePath());
+            }
+        }
+
+
+
+    }
+
 }
