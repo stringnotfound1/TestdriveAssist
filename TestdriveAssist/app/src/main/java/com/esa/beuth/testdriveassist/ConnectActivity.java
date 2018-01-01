@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.berner.mattner.tools.networking.client.Client;
+import com.esa.beuth.testdriveassist.global.Static;
 import com.esa.beuth.testdriveassist.gui.CustomConnectVarElement;
 
 import lombok.NonNull;
@@ -47,7 +48,7 @@ public class ConnectActivity extends AppCompatActivity {
         tvOk.setOnClickListener(this::connectClicked);
         tvTest.setOnClickListener(this::testClicked);
 
-        Toast.makeText(getApplicationContext(), "client started", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "started", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -61,15 +62,16 @@ public class ConnectActivity extends AppCompatActivity {
                 if (inputToast != null)
                     inputToast.cancel();
                 Log.d(TAG,"Data: "+input);
-                inputToast = Toast.makeText(getApplicationContext(), input, Toast.LENGTH_SHORT);
+                inputToast = Toast.makeText(this, input, Toast.LENGTH_SHORT);
                 inputToast.show();
             }
         });
+
         new Thread(() -> {
             Looper.prepare();
             try {
                 Log.d(TAG,"Try connection");
-//                client.start("192.168.43.11", 60000);
+//                client.start("192.168.178.47", 60000);
                 client.start(tvIP.getText().toString(), Integer.parseInt(tvPort.getText().toString()));
                 Toast.makeText(getApplicationContext(), "client started", Toast.LENGTH_SHORT).show();
                 Log.d(TAG,"Connection success?");
@@ -79,6 +81,8 @@ public class ConnectActivity extends AppCompatActivity {
                 Log.e(TAG, "Connection Error");
             }
         }).start();
+
+        Static.client = client;
 
         startActivity(new Intent(this, TestSuiteOverviewActivity.class));
     }

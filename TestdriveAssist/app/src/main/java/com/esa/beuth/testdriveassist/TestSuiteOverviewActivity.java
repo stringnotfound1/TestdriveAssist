@@ -1,22 +1,16 @@
 package com.esa.beuth.testdriveassist;
 
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.esa.beuth.testdriveassist.Global.Static;
+import com.esa.beuth.testdriveassist.global.Static;
 
 import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TestSuiteOverviewActivity extends AppCompatActivity {
 
@@ -36,6 +30,8 @@ public class TestSuiteOverviewActivity extends AppCompatActivity {
         tvOk = findViewById(R.id.tv_activity_test_suite_overview);
 
         tvOk.setOnClickListener(view -> startActivity(new Intent(this, TestAssistActivity.class)));
+
+        Toast.makeText(getApplicationContext(), "started", Toast.LENGTH_SHORT).show();
 
 
     }

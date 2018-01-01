@@ -3,17 +3,28 @@ package com.esa.beuth.testdriveassist;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.berner.mattner.tools.networking.client.Client;
+import com.esa.beuth.testdriveassist.global.Static;
 
 import java.util.List;
 import java.util.Locale;
 
 public class TestAssistActivity extends AppCompatActivity implements TextToSpeech.OnInitListener{
 
+    private static final String TAG ="TestAssist";
+
     private TextView tvReadTTS;
     private TextToSpeech tts;
     private boolean ttsIsInitialized;
+    private Client client;
+
+    private Toast inputToast = null;
+    private String inputText = "";
 
     private List currentTest;
 
@@ -26,6 +37,19 @@ public class TestAssistActivity extends AppCompatActivity implements TextToSpeec
 //        set Language to phone locale
         tts.setLanguage(Locale.getDefault());
 //        tts.setLanguage(Locale.GERMAN);
+
+        client = Static.client;
+        client.setOnInput((length, bytes) -> {
+
+            String input = new String(bytes, 0, length);
+            if (!inputText.equals(input)) {
+                if (inputToast != null)
+                    inputToast.cancel();
+                Log.d(TAG,"Data: "+input);
+                inputToast = Toast.makeText(this, input, Toast.LENGTH_SHORT);
+                inputToast.show();
+            }
+        });
 
     }
 
