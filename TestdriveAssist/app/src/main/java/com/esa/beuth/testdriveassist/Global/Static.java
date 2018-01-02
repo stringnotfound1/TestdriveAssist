@@ -13,6 +13,6 @@ public class Static {
     public static final String FILEPATH = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String XMLPATH = "/TestDriveAssist/files/XML/";
 
-    public static  Client client;
+    public static  Client client = new Client();
 
 }

@@ -55,7 +55,7 @@ public class ConnectActivity extends AppCompatActivity {
     private void connectClicked(final @NonNull View view) {
         Client client = new Client();
         Log.d(TAG,"Try connection");
-        client.setOnInput((length, bytes) -> {
+        Static.client.setOnInput((length, bytes) -> {
 
             String input = new String(bytes, 0, length);
             if (!inputText.equals(input)) {
@@ -72,7 +72,7 @@ public class ConnectActivity extends AppCompatActivity {
             try {
                 Log.d(TAG,"Try connection");
 //                client.start("192.168.178.47", 60000);
-                client.start(tvIP.getText().toString(), Integer.parseInt(tvPort.getText().toString()));
+                Static.client.start(tvIP.getText().toString(), Integer.parseInt(tvPort.getText().toString()));
                 Toast.makeText(getApplicationContext(), "client started", Toast.LENGTH_SHORT).show();
                 Log.d(TAG,"Connection success?");
             } catch (Exception e) {
@@ -82,7 +82,7 @@ public class ConnectActivity extends AppCompatActivity {
             }
         }).start();
 
-        Static.client = client;
+//        Static.client = client;
 
         startActivity(new Intent(this, TestSuiteOverviewActivity.class));
     }

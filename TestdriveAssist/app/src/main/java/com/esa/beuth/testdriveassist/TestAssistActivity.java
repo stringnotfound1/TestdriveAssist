@@ -21,7 +21,6 @@ public class TestAssistActivity extends AppCompatActivity implements TextToSpeec
     private TextView tvReadTTS;
     private TextToSpeech tts;
     private boolean ttsIsInitialized;
-    private Client client;
 
     private Toast inputToast = null;
     private String inputText = "";
@@ -38,8 +37,7 @@ public class TestAssistActivity extends AppCompatActivity implements TextToSpeec
         tts.setLanguage(Locale.getDefault());
 //        tts.setLanguage(Locale.GERMAN);
 
-        client = Static.client;
-        client.setOnInput((length, bytes) -> {
+        Static.client.setOnInput((length, bytes) -> {
 
             String input = new String(bytes, 0, length);
             if (!inputText.equals(input)) {
