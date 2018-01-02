@@ -37,6 +37,8 @@ public class TestAssistActivity extends AppCompatActivity implements TextToSpeec
         tts.setLanguage(Locale.getDefault());
 //        tts.setLanguage(Locale.GERMAN);
 
+        Log.d(TAG,"FileName: "+getIntent().getStringExtra(Static.TEST_NAME_EXTRA));
+
         Static.client.setOnInput((length, bytes) -> {
 
             String input = new String(bytes, 0, length);
