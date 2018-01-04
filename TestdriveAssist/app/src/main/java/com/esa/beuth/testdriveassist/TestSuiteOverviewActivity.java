@@ -57,12 +57,14 @@ public class TestSuiteOverviewActivity extends AppCompatActivity {
 
         File xmlDir = new File(Static.FILEPATH+Static.XMLPATH);
 
-        for (File f : xmlDir.listFiles()){
-            if(f.getPath().endsWith("xml")){
-                xmlFileList.add(f.getName());
-                Log.d(TAG, f.getAbsolutePath());
-            }
-        }
+         if (xmlDir.listFiles().length > 0) {
+             for (File f : xmlDir.listFiles()) {
+                 if (f.getPath().endsWith("xml")) {
+                     xmlFileList.add(f.getName());
+                     Log.d(TAG, f.getAbsolutePath());
+                 }
+             }
+         }
 
 
 

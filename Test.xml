@@ -2,30 +2,30 @@
 <TestSuite successful="false">
 	<TestCase successful="false">
 		<TestStep successful="false">
-			<TestCondition type="weather" value="rain" successful="false">
-			<TestCondition type="acceleration" value="100" successful="false">
-			<TestCondition type="wait" value="2" successful="false">
-			<TestCondition type="turn" value="30" time="2" repeatable="true" successful="false">
+			<TestCondition type="weather" value="rain" successful="false"/>
+			<TestCondition type="acceleration" value="100" successful="false"/>
+			<TestCondition type="wait" value="2" successful="false"/>
+			<TestCondition type="turn" value="30" time="2" repeatable="true" successful="false"/>
 		</TestStep>
 		<TestStep successful="false">
-			<TestCondition type="weather" value="rain" successful="false">
-			<TestCondition type="acceleration" value="100" successful="false">
-			<TestCondition type="wait" value="2" successful="false">
-			<TestCondition type="turn" value="30" time="2" repeatable="true" successful="false">
+			<TestCondition type="weather" value="rain" successful="false"/>
+			<TestCondition type="acceleration" value="100" successful="false"/>
+			<TestCondition type="wait" value="2" successful="false"/>
+			<TestCondition type="turn" value="30" time="2" repeatable="true" successful="false"/>
 		</TestStep>  		
 	</TestCase>
 	<TestCase successful="false">
 		<TestStep successful="false">
-			<TestCondition type="weather" value="rain" successful="false">
-			<TestCondition type="acceleration" value="100" successful="false">
-			<TestCondition type="wait" value="2" successful="false">
-			<TestCondition type="turn" value="30" time="2" repeatable="true" successful="false">
+			<TestCondition type="weather" value="rain" successful="false"/>
+			<TestCondition type="acceleration" value="100" successful="false"/>
+			<TestCondition type="wait" value="2" successful="false"/>
+			<TestCondition type="turn" value="30" time="2" repeatable="true" successful="false"/>
 		</TestStep>
 		<TestStep successful="false">
-			<TestCondition type="weather" value="rain" successful="false">
-			<TestCondition type="acceleration" value="100" successful="false">
-			<TestCondition type="wait" value="2" successful="false">
-			<TestCondition type="turn" value="30" time="2" repeatable="true" successful="false">
+			<TestCondition type="weather" value="rain" successful="false"/>
+			<TestCondition type="acceleration" value="100" successful="false"/>
+			<TestCondition type="wait" value="2" successful="false"/>
+			<TestCondition type="turn" value="30" time="2" repeatable="true" successful="false"/>
 		</TestStep>  		
 	</TestCase>
 </TestSuite>
