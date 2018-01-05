@@ -1,6 +1,7 @@
 package com.esa.beuth.testdriveassist.gui;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -44,6 +45,12 @@ public class CustomTestStep extends LinearLayout {
     public void setFailed(){
         ivCheck.setImageResource(R.drawable.cancel);
     }
+
+    /**
+     *
+     * @param color Use Resource, e.g. getResources().getColor(R.color.background); or R.color.background
+     */
+    public void setColor(Integer color){ llTestStep.setBackgroundColor(color); }
 
 
 }

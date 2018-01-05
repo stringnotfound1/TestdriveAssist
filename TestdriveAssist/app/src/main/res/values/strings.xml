@@ -11,4 +11,6 @@
     <string name="permission_storage">please grant storage permission to enable read/write of test files</string>
     <string name="ip_address">IP Address</string>
     <string name="port">Port</string>
+    <string name="steering_angle">Steering Angle</string>
+    <string name="speed">Speed</string>
 </resources>
