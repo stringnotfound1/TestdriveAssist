@@ -60,9 +60,7 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},2909);
 
         }
-
     }
-
 
     private void createXMLDir(){
 
