@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Testdrive Assist</string>
+    <string name="ip_address">IP Adresse</string>
+    <string name="ok">ok</string>
+    <string name="permission_storage">Bitte gewähren Sie Zugriff auf den lokalen Speicher, um Dateien schreiben und lesen zu können.</string>
+    <string name="port">Port</string>
+    <string name="speed">Geschwindigkeit</string>
+    <string name="steering_angle">Lenkwinkel</string>
+    <string name="title_choose_test">Test Suite auswählen</string>
+    <string name="title_input_connection">Eingabe der Verbindungsdaten</string>
+    <string name="title_select_connection">Verbindung auswählen</string>
+    <string name="title_test_assist">Test Assist</string>
+    <string name="activity_main_menu_2">Menü 2</string>
+    <string name="activity_main_menu_1">Verbindung auswählen</string>
+</resources>

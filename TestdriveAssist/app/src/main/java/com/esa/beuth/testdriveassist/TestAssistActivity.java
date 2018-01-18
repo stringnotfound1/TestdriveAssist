@@ -51,8 +51,8 @@ public class TestAssistActivity extends AppCompatActivity implements TextToSpeec
 
         tts = new TextToSpeech(this,this);
 //        set Language to phone locale
-        tts.setLanguage(Locale.getDefault());
-//        tts.setLanguage(Locale.GERMAN);
+//        tts.setLanguage(Locale.getDefault());
+        tts.setLanguage(Locale.ENGLISH);
 
         Log.d(TAG,"FileName: "+getIntent().getStringExtra(Static.TEST_NAME_EXTRA));
 
@@ -111,9 +111,11 @@ public class TestAssistActivity extends AppCompatActivity implements TextToSpeec
          switch (input.split(":")[0]){
                 case Static.IDENTIFIER_SPEED:
                     tvSpeed.setText(input.split(":")[1]);
+                    useTTS(getString(R.string.speed)+input.split(":")[1]);
                     break;
                 case Static.IDENTIFIER_STEERING_ANGLE:
                     tvSteeringAngle.setText(input.split(":")[1]);
+                    useTTS(getString(R.string.steering_angle)+input.split(":")[1]);
                     break;
                 default: Log.d(TAG,"Data identifier: " + input.split(":")[0]);
                     break;
