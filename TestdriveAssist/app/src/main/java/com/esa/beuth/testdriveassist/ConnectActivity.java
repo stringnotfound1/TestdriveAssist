@@ -53,7 +53,6 @@ public class ConnectActivity extends AppCompatActivity {
     }
 
     private void connectClicked(final @NonNull View view) {
-        Client client = new Client();
         Log.d(TAG,"Try connection");
         Static.client.setOnInput((length, bytes) -> {
 

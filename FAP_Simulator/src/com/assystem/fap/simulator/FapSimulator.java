@@ -1,5 +1,6 @@
 package com.assystem.fap.simulator;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
 
@@ -39,6 +40,13 @@ public class FapSimulator {
 
 	public void onFieldChanged(final @NonNull Field field, final Object value) {
 		server.writeBroadcast((field.getName() + ":" + value).getBytes());
+		server.getClientSockets().forEach(client -> {
+			try {
+				client.getOutputStream().flush();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
 	}
 
 	public void onClose() {

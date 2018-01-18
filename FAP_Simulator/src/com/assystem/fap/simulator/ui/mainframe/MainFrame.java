@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.assystem.fap.simulator.FapSimulator;
-import com.assystem.fap.simulator.FapSimulator.ValueDatabase;
 import com.berner.mattner.javafx.JavaFxApplicationWrapper;
 import com.berner.mattner.javafx.JavaFxUtils;
 
@@ -34,7 +33,6 @@ public class MainFrame extends JavaFxApplicationWrapper implements Initializable
 	private final BiConsumer<Field, Object> onFieldChaned;
 	private final Runnable onClose;
 	private final Object valueHolder;
-
 
 	@Override
 	public void start(final @NonNull Stage primaryStage) throws Exception {

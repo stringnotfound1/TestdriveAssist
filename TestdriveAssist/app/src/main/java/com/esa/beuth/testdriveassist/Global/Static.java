@@ -22,5 +22,4 @@ public class Static {
     public static final String IDENTIFIER_STEERING_ANGLE = "steeringAngle";
 
     public static  Client client = new Client();
-
 }

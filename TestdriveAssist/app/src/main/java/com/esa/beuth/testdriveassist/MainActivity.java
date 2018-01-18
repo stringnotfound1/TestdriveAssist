@@ -14,11 +14,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.esa.beuth.testdriveassist.global.Static;
+
 import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG ="MainActivity";
+    private static final String TAG = "MainActivity";
     private ImageView ivMenu1;
     private ImageView ivMenu2;
 
@@ -27,12 +29,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Log.d(TAG, "BLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + Static.FILEPATH + " " + Static.XMLPATH);
+
         ivMenu1 = findViewById(R.id.iv_activity_main_menu_1);
         ivMenu2 = findViewById(R.id.iv_activity_main_menu_2);
 
         ivMenu1.setOnClickListener(view -> startActivity(new Intent(this, ConnectionOverviewActivity.class)));
 //        ivMenu2.setOnClickListener(this::bla);
-        ivMenu2.setOnClickListener(view -> startActivity(new Intent(this,TestActivity.class)));
+        ivMenu2.setOnClickListener(view -> startActivity(new Intent(this, TestActivity.class)));
 
         askStoragePermission();
         createXMLDir();
@@ -40,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void bla(View view){
+    private void bla(View view) {
 
     }
 
@@ -52,19 +56,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void askStoragePermission(){
+    private void askStoragePermission() {
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},2909);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2909);
 
         }
 
     }
 
 
-    private void createXMLDir(){
+    private void createXMLDir() {
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -80,10 +84,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        Log.d(TAG, "onRequest "+permissions+" "+grantResults);
+        Log.d(TAG, "onRequest " + permissions + " " + grantResults);
         switch (requestCode) {
             case 2909: {
-                if (grantResults.length>0){
+                if (grantResults.length > 0) {
                     if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                         Log.e("Permission", "Granted");
                     } else {
