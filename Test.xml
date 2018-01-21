@@ -1,31 +1,15 @@
 <?xml version="1.0"?>
-<TestSuite successful="false">
-	<TestCase successful="false">
-		<TestStep successful="false">
-			<TestCondition type="weather" value="rain" successful="false"/>
-			<TestCondition type="acceleration" value="100" successful="false"/>
-			<TestCondition type="wait" value="2" successful="false"/>
-			<TestCondition type="turn" value="30" time="2" repeatable="true" successful="false"/>
-		</TestStep>
-		<TestStep successful="false">
-			<TestCondition type="weather" value="rain" successful="false"/>
-			<TestCondition type="acceleration" value="100" successful="false"/>
-			<TestCondition type="wait" value="2" successful="false"/>
-			<TestCondition type="turn" value="30" time="2" repeatable="true" successful="false"/>
-		</TestStep>  		
+<TestSuite>
+	<TestCase>
+		<TestStep type="weather" value="rain"/>
+		<TestStep type="acceleration" value="100"/>
+		<TestStep type="wait" value="2"/>
+		<TestStep type="turn" value="50" time="2" repeatable="true"/>		
 	</TestCase>
-	<TestCase successful="false">
-		<TestStep successful="false">
-			<TestCondition type="weather" value="rain" successful="false"/>
-			<TestCondition type="acceleration" value="100" successful="false"/>
-			<TestCondition type="wait" value="2" successful="false"/>
-			<TestCondition type="turn" value="30" time="2" repeatable="true" successful="false"/>
-		</TestStep>
-		<TestStep successful="false">
-			<TestCondition type="weather" value="rain" successful="false"/>
-			<TestCondition type="acceleration" value="100" successful="false"/>
-			<TestCondition type="wait" value="2" successful="false"/>
-			<TestCondition type="turn" value="30" time="2" repeatable="true" successful="false"/>
-		</TestStep>  		
+	<TestCase>
+		<TestStep type="weather" value="rain"/>
+		<TestStep type="acceleration" value="100"/>
+		<TestStep type="wait" value="2"/>
+		<TestStep type="turn" value="30" time="2" repeatable="true"/>		
 	</TestCase>
 </TestSuite>
