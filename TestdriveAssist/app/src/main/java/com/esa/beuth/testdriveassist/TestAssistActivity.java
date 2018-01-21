@@ -102,7 +102,7 @@ public class TestAssistActivity extends AppCompatActivity implements TextToSpeec
                 return;
             customTestSteps.get(testStep).setPassed();
             Static.unregisterForValue(listener);
-            test(testCasesIndex + 1, testStepIndex + 1);
+            test(testCasesIndex, testStepIndex + 1);
         };
         Static.registerForValue(testStep.getType(), listener);
     }
