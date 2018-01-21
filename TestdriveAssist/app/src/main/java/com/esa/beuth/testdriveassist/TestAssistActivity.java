@@ -19,9 +19,11 @@ import com.esa.beuth.testdriveassist.xml.TestSuite;
 import com.esa.beuth.testdriveassist.xml.TestXmlParser;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 
 import lombok.NonNull;
 
@@ -68,7 +70,7 @@ public class TestAssistActivity extends AppCompatActivity implements TextToSpeec
 
         try {
             TestSuite testSuite = TestXmlParser.parse(completePath);
-            customTestSteps = new HashMap<>();
+            customTestSteps = new LinkedHashMap<>();
             testCases = testSuite.getTestCases();
             for (TestCase testCase : testCases) {
                 ImageView iv = new ImageView(this);
@@ -77,6 +79,7 @@ public class TestAssistActivity extends AppCompatActivity implements TextToSpeec
                 for (TestStep testStep : testCase.getTestSteps()) {
                     CustomTestStep customTestStep = new CustomTestStep(this);
                     customTestStep.setText(testStep.getType() + " " + testStep.getValue());
+                    testStep.setCustomId(UUID.randomUUID().toString());
                     ll.addView(customTestStep);
                     customTestSteps.put(testStep, customTestStep);
                 }
@@ -91,7 +94,9 @@ public class TestAssistActivity extends AppCompatActivity implements TextToSpeec
         if (testCasesIndex >= testCases.size())
             return;
         TestCase testCase = testCases.get(testCasesIndex);
+        Log.d(TAG, "TestStepIndex: "+testStepIndex+" Size: "+testCase.getTestSteps().size());
         if (testStepIndex >= testCase.getTestSteps().size()) {
+            Log.d(TAG, "Next TestCase");
             test(testCasesIndex + 1, 0);
             return;
         }

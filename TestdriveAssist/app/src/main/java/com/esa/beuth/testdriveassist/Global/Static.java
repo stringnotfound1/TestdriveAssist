@@ -35,8 +35,10 @@ public class Static {
 
     public static void setValue(final @NonNull String key, final String value) {
         values.put(key, value);
-        for (Consumer<String> c : valueListeners.get(key))
-            c.accept(value);
+        if (null != valueListeners.get(key)){
+            for (Consumer<String> c : valueListeners.get(key))
+                c.accept(value);
+        }
     }
 
     public static Object getValue(final @NonNull String key) {

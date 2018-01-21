@@ -4,6 +4,8 @@ import lombok.Data;
 
 @Data
 public class TestStep {
+
+    private String customId;
     private Boolean successful;
     private String type;
     private String value;
