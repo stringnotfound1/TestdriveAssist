@@ -1,6 +1,7 @@
 package com.esa.beuth.testdriveassist.xml;
 
 import com.berner.mattner.tools.xml.XmlUtils;
+import com.esa.beuth.testdriveassist.gui.CustomTestStep;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -17,28 +18,27 @@ public class TestXmlParser {
             switch (element.getNodeName()) {
                 case "TestSuite":
                     current = new TestSuite();
-                    ((TestSuite) current).setSuccesful(Boolean.parseBoolean(attributes.getNamedItem("successful").getNodeValue()));
+                    if (attributes.getNamedItem("successful") != null)
+                        ((TestSuite) current).setSuccessful(Boolean.parseBoolean(attributes.getNamedItem("successful").getNodeValue()));
                     break;
                 case "TestCase":
                     current = new TestCase();
                     ((TestSuite) parent).getTestCases().add((TestCase) current);
-                    ((TestCase) current).setSuccesful(Boolean.parseBoolean(attributes.getNamedItem("successful").getNodeValue()));
+                    if (attributes.getNamedItem("successful") != null)
+                        ((TestCase) current).setSuccessful(Boolean.parseBoolean(attributes.getNamedItem("successful").getNodeValue()));
                     break;
                 case "TestStep":
                     current = new TestStep();
                     ((TestCase) parent).getTestSteps().add((TestStep) current);
-                    ((TestStep) current).setSuccesful(Boolean.parseBoolean(attributes.getNamedItem("successful").getNodeValue()));
-                    break;
-                case "TestCondition":
-                    current = new TestCondition();
-                    ((TestStep) parent).getTestConditions().add((TestCondition) current);
-                    ((TestCondition) current).setSuccessful(Boolean.parseBoolean(attributes.getNamedItem("successful").getNodeValue()));
-                    ((TestCondition) current).setType(attributes.getNamedItem("type").getNodeValue());
-                    ((TestCondition) current).setValue(attributes.getNamedItem("value").getNodeValue());
+                    TestStep testStep = (TestStep) current;
+                    testStep.setType(attributes.getNamedItem("type").getNodeValue());
+                    testStep.setValue(attributes.getNamedItem("value").getNodeValue());
+                    if (attributes.getNamedItem("successful") != null)
+                        testStep.setSuccessful(Boolean.parseBoolean(attributes.getNamedItem("successful").getNodeValue()));
                     if (attributes.getNamedItem("time") != null)
-                        ((TestCondition) current).setTime(Long.parseLong(attributes.getNamedItem("time").getNodeValue()));
+                        testStep.setTime(Long.parseLong(attributes.getNamedItem("time").getNodeValue()));
                     if (attributes.getNamedItem("repeatable") != null)
-                        ((TestCondition) current).setRepeatable(Boolean.parseBoolean(attributes.getNamedItem("repeatable").getNodeValue()));
+                        testStep.setRepeatable(Boolean.parseBoolean(attributes.getNamedItem("repeatable").getNodeValue()));
                     break;
             }
             return current;

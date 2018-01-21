@@ -12,7 +12,7 @@ import lombok.NonNull;
 
 public class TestXmlWriter {
 
-    public void write(final @NonNull String filePath, final @NonNull TestSuite testSuite) {
+    public static void write(final @NonNull String filePath, final @NonNull TestSuite testSuite) {
         try {
             XmlUtils.write(filePath, XmlUtils.objectToXmlElement(testSuite, object -> object.getClass().getSimpleName()));
         } catch (TransformerException e) {

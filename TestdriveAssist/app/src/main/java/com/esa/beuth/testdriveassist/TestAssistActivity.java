@@ -1,6 +1,5 @@
 package com.esa.beuth.testdriveassist;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.content.ContextCompat;
@@ -11,16 +10,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.esa.beuth.testdriveassist.global.Consumer;
 import com.esa.beuth.testdriveassist.global.Static;
 import com.esa.beuth.testdriveassist.gui.CustomTestStep;
 import com.esa.beuth.testdriveassist.xml.TestCase;
-import com.esa.beuth.testdriveassist.xml.TestCondition;
 import com.esa.beuth.testdriveassist.xml.TestStep;
 import com.esa.beuth.testdriveassist.xml.TestSuite;
 import com.esa.beuth.testdriveassist.xml.TestXmlParser;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+
+import lombok.NonNull;
 
 public class TestAssistActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
 
@@ -36,7 +39,10 @@ public class TestAssistActivity extends AppCompatActivity implements TextToSpeec
     private TextView tvSpeed;
     private TextView tvSteeringAngle;
 
-    private List currentTest;
+    private List<TestCase> testCases;
+    private Map<TestStep, CustomTestStep> customTestSteps;
+
+    private Consumer<String> listener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,34 +66,58 @@ public class TestAssistActivity extends AppCompatActivity implements TextToSpeec
 
         Log.d(TAG, "File Path: " + completePath);
 
-        TestXmlParser testXmlParser = new TestXmlParser();
         try {
-            TestSuite testSuite = testXmlParser.parse(completePath);
-            List<TestCase> testCases = testSuite.getTestCases();
+            TestSuite testSuite = TestXmlParser.parse(completePath);
+            customTestSteps = new HashMap<>();
+            testCases = testSuite.getTestCases();
             for (TestCase testCase : testCases) {
+                ImageView iv = new ImageView(this);
+                iv.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.separator));
+                ll.addView(iv);
                 for (TestStep testStep : testCase.getTestSteps()) {
-                    ImageView iv = new ImageView(this);
-                    iv.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.separator));
-                    ll.addView(iv);
-                    for (TestCondition testCondition : testStep.getTestConditions()) {
-                        CustomTestStep customTestStep = new CustomTestStep(this);
-                        customTestStep.setText(testCondition.getType() + " " + testCondition.getValue());
-                        ll.addView(customTestStep);
-                    }
+                    CustomTestStep customTestStep = new CustomTestStep(this);
+                    customTestStep.setText(testStep.getType() + " " + testStep.getValue());
+                    ll.addView(customTestStep);
+                    customTestSteps.put(testStep, customTestStep);
                 }
             }
+            test(0, 0);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
-        Static.registerForValue(Static.IDENTIFIER_SPEED, value -> {
-            tvSpeed.setText(value + "");
-            useTTS(getString(R.string.speed) + value);
-        });
-        Static.registerForValue(Static.IDENTIFIER_STEERING_ANGLE, value -> {
-            tvSteeringAngle.setText(value + "");
-            useTTS(getString(R.string.steering_angle) + value);
-        });
+    private void test(int testCasesIndex, int testStepIndex) {
+        if (testCasesIndex >= testCases.size())
+            return;
+        TestCase testCase = testCases.get(testCasesIndex);
+        if (testStepIndex >= testCase.getTestSteps().size()) {
+            test(testCasesIndex + 1, 0);
+            return;
+        }
+
+        TestStep testStep = testCase.getTestSteps().get(testStepIndex);
+        listener = value -> {
+            if (!parseValue(value).equals(parseValue(testStep.getValue())))
+                return;
+            customTestSteps.get(testStep).setPassed();
+            Static.unregisterForValue(listener);
+            test(testCasesIndex + 1, testStepIndex + 1);
+        };
+        Static.registerForValue(testStep.getType(), listener);
+    }
+
+    private Object parseValue(final @NonNull String stringValue) {
+        Object parsedValue = null;
+        try {
+            parsedValue = Double.parseDouble(stringValue);
+        } catch (Exception e) {
+        }
+        if (stringValue.equals("true") || stringValue.equals("false"))
+            parsedValue = Boolean.parseBoolean(stringValue);
+        if (parsedValue == null)
+            parsedValue = stringValue;
+        return parsedValue;
     }
 
     private void useTTS(String text) {

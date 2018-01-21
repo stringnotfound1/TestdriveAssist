@@ -30,12 +30,12 @@ public class Static {
 
     public static Client client = new Client();
 
-    private static Map<String, Object> values = new HashMap<>();
-    private static Map<String, List<Consumer<Object>>> valueListeners = new HashMap<>();
+    private static Map<String, String> values = new HashMap<>();
+    private static Map<String, List<Consumer<String>>> valueListeners = new HashMap<>();
 
-    public static void setValue(final @NonNull String key, final Object value) {
+    public static void setValue(final @NonNull String key, final String value) {
         values.put(key, value);
-        for (Consumer<Object> c : valueListeners.get(key))
+        for (Consumer<String> c : valueListeners.get(key))
             c.accept(value);
     }
 
@@ -43,15 +43,15 @@ public class Static {
         return values.get(key);
     }
 
-    public static void registerForValue(final @NonNull String key, final @NonNull Consumer<Object> listener) {
+    public static void registerForValue(final @NonNull String key, final @NonNull Consumer<String> listener) {
         if (!valueListeners.containsKey(key))
             valueListeners.put(key, new LinkedList<>());
         valueListeners.get(key).add(listener);
     }
 
-    public static void unregisterForValue(final @NonNull Consumer<Object> listener) {
+    public static void unregisterForValue(final @NonNull Consumer<String> listener) {
         String key = null;
-        for (Map.Entry<String, List<Consumer<Object>>> entry : valueListeners.entrySet()) {
+        for (Map.Entry<String, List<Consumer<String>>> entry : valueListeners.entrySet()) {
             if (entry.getValue().contains(listener)) {
                 key = entry.getKey();
                 break;

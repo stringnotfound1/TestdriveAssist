@@ -8,5 +8,5 @@ import lombok.Data;
 @Data
 public class TestSuite {
 	private final List<TestCase> testCases = new LinkedList<>();
-	private Boolean succesful;
+	private Boolean successful;
 }

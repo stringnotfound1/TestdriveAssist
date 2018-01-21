@@ -1,12 +1,12 @@
 package com.esa.beuth.testdriveassist.xml;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import lombok.Data;
 
 @Data
 public class TestStep {
-	private final List<TestCondition> testConditions = new LinkedList<>();
-	private Boolean succesful;
+    private Boolean successful;
+    private String type;
+    private String value;
+    private long time;
+    private boolean repeatable;
 }
