@@ -4,6 +4,13 @@ import android.os.Environment;
 
 import com.berner.mattner.tools.networking.client.Client;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import lombok.NonNull;
+
 /**
  * Created by Alex on 01.01.2018.
  */
@@ -21,5 +28,36 @@ public class Static {
     public static final String IDENTIFIER_SPEED = "speed";
     public static final String IDENTIFIER_STEERING_ANGLE = "steeringAngle";
 
-    public static  Client client = new Client();
+    public static Client client = new Client();
+
+    private static Map<String, Object> values = new HashMap<>();
+    private static Map<String, List<Consumer<Object>>> valueListeners = new HashMap<>();
+
+    public static void setValue(final @NonNull String key, final Object value) {
+        values.put(key, value);
+        for (Consumer<Object> c : valueListeners.get(key))
+            c.accept(value);
+    }
+
+    public static Object getValue(final @NonNull String key) {
+        return values.get(key);
+    }
+
+    public static void registerForValue(final @NonNull String key, final @NonNull Consumer<Object> listener) {
+        if (!valueListeners.containsKey(key))
+            valueListeners.put(key, new LinkedList<>());
+        valueListeners.get(key).add(listener);
+    }
+
+    public static void unregisterForValue(final @NonNull Consumer<Object> listener) {
+        String key = null;
+        for (Map.Entry<String, List<Consumer<Object>>> entry : valueListeners.entrySet()) {
+            if (entry.getValue().contains(listener)) {
+                key = entry.getKey();
+                break;
+            }
+        }
+        if (key != null)
+            valueListeners.get(key).remove(listener);
+    }
 }

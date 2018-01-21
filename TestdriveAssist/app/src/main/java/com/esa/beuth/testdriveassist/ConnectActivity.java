@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.berner.mattner.tools.networking.client.Client;
 import com.esa.beuth.testdriveassist.global.Static;
 import com.esa.beuth.testdriveassist.gui.CustomConnectVarElement;
 
@@ -53,27 +52,21 @@ public class ConnectActivity extends AppCompatActivity {
     }
 
     private void connectClicked(final @NonNull View view) {
-        Log.d(TAG,"Try connection");
-        Static.client.setOnInput((length, bytes) -> {
-
+        Log.d(TAG, "Try connection");
+        Static.client.setOnInput((length, bytes) -> runOnUiThread(() -> {
             String input = new String(bytes, 0, length);
-            if (!inputText.equals(input)) {
-                if (inputToast != null)
-                    inputToast.cancel();
-                Log.d(TAG,"Data: "+input);
-                inputToast = Toast.makeText(this, input, Toast.LENGTH_SHORT);
-                inputToast.show();
-            }
-        });
+            String[] split = input.split(":");
+            Static.setValue(split[0], split[1]);
+        }));
 
         new Thread(() -> {
             Looper.prepare();
             try {
-                Log.d(TAG,"Try connection");
+                Log.d(TAG, "Try connection");
 //                client.start("192.168.178.47", 60000);
                 Static.client.start(tvIP.getText().toString(), Integer.parseInt(tvPort.getText().toString()));
                 Toast.makeText(getApplicationContext(), "client started", Toast.LENGTH_SHORT).show();
-                Log.d(TAG,"Connection success?");
+                Log.d(TAG, "Connection success?");
             } catch (Exception e) {
                 Toast.makeText(getApplicationContext(), "error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
