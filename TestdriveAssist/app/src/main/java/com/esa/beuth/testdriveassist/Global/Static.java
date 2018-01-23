@@ -1,6 +1,11 @@
 package com.esa.beuth.testdriveassist.global;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Environment;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
+import android.widget.Toast;
 
 import com.berner.mattner.tools.networking.client.Client;
 
@@ -35,10 +40,10 @@ public class Static {
 
     public static void setValue(final @NonNull String key, final String value) {
         values.put(key, value);
-        if (null != valueListeners.get(key)){
-            for (Consumer<String> c : valueListeners.get(key))
-                c.accept(value);
-        }
+        if (!valueListeners.containsKey(key))
+            return;
+        for (Consumer<String> c : valueListeners.get(key))
+            c.accept(value);
     }
 
     public static Object getValue(final @NonNull String key) {

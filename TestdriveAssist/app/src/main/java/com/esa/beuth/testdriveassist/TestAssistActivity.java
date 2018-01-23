@@ -3,7 +3,6 @@ package com.esa.beuth.testdriveassist;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,16 +17,13 @@ import com.esa.beuth.testdriveassist.xml.TestStep;
 import com.esa.beuth.testdriveassist.xml.TestSuite;
 import com.esa.beuth.testdriveassist.xml.TestXmlParser;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.UUID;
 
 import lombok.NonNull;
 
-public class TestAssistActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
+public class TestAssistActivity extends SpeechActivity {
 
     private static final String TAG = "TestAssist";
 
@@ -56,11 +52,6 @@ public class TestAssistActivity extends AppCompatActivity implements TextToSpeec
         tvSpeed = findViewById(R.id.tv_activity_test_assist_speed);
         tvSteeringAngle = findViewById(R.id.tv_activity_test_steering_angle);
 
-        tts = new TextToSpeech(this, this);
-//        set Language to phone locale
-//        tts.setLanguage(Locale.getDefault());
-        tts.setLanguage(Locale.ENGLISH);
-
         Log.d(TAG, "FileName: " + getIntent().getStringExtra(Static.TEST_NAME_EXTRA));
 
         String fileName = getIntent().getStringExtra(Static.TEST_NAME_EXTRA);
@@ -79,7 +70,6 @@ public class TestAssistActivity extends AppCompatActivity implements TextToSpeec
                 for (TestStep testStep : testCase.getTestSteps()) {
                     CustomTestStep customTestStep = new CustomTestStep(this);
                     customTestStep.setText(testStep.getType() + " " + testStep.getValue());
-                    testStep.setCustomId(UUID.randomUUID().toString());
                     ll.addView(customTestStep);
                     customTestSteps.put(testStep, customTestStep);
                 }
@@ -94,7 +84,7 @@ public class TestAssistActivity extends AppCompatActivity implements TextToSpeec
         if (testCasesIndex >= testCases.size())
             return;
         TestCase testCase = testCases.get(testCasesIndex);
-        Log.d(TAG, "TestStepIndex: "+testStepIndex+" Size: "+testCase.getTestSteps().size());
+        Log.d(TAG, "TestStepIndex: " + testStepIndex + " Size: " + testCase.getTestSteps().size());
         if (testStepIndex >= testCase.getTestSteps().size()) {
             Log.d(TAG, "Next TestCase");
             test(testCasesIndex + 1, 0);
@@ -106,6 +96,7 @@ public class TestAssistActivity extends AppCompatActivity implements TextToSpeec
             if (!parseValue(value).equals(parseValue(testStep.getValue())))
                 return;
             customTestSteps.get(testStep).setPassed();
+            textToSpeech("TestStep successful");
             Static.unregisterForValue(listener);
             test(testCasesIndex, testStepIndex + 1);
         };
@@ -123,25 +114,5 @@ public class TestAssistActivity extends AppCompatActivity implements TextToSpeec
         if (parsedValue == null)
             parsedValue = stringValue;
         return parsedValue;
-    }
-
-    private void useTTS(String text) {
-        if (ttsIsInitialized) {
-//            tts.speak(etText.getText().toString(), TextToSpeech.QUEUE_FLUSH, null, this.hashCode()+"" );
-            tts.speak(text, TextToSpeech.QUEUE_ADD, null, this.hashCode() + "");
-        }
-
-    }
-
-    @Override
-    public void onInit(int i) {
-        if (i == 0)
-            ttsIsInitialized = true;
-    }
-
-    @Override
-    protected void onStop() {
-        tts.shutdown();
-        super.onStop();
     }
 }

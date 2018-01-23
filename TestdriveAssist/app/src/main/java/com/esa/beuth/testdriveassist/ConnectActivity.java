@@ -3,7 +3,6 @@ package com.esa.beuth.testdriveassist;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -15,7 +14,7 @@ import com.esa.beuth.testdriveassist.gui.CustomConnectVarElement;
 
 import lombok.NonNull;
 
-public class ConnectActivity extends AppCompatActivity {
+public class ConnectActivity extends SpeechActivity {
 
     private static final String TAG = "ConnectActivity";
 
@@ -55,9 +54,9 @@ public class ConnectActivity extends AppCompatActivity {
         Log.d(TAG, "Try connection");
         Static.client.setOnInput((length, bytes) -> runOnUiThread(() -> {
             String input = new String(bytes, 0, length);
-            Log.d(TAG,"Input Data: "+ input);
+            Log.d(TAG, "Input Data: " + input);
             String[] split = input.split(":");
-            Log.d(TAG, "Split length: " + split.length+" " +split[1]);
+            Log.d(TAG, "Split length: " + split.length + " " + split[1]);
             Static.setValue(split[0], split[1]);
         }));
 

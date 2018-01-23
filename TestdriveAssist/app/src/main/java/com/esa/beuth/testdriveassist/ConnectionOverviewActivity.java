@@ -2,7 +2,6 @@ package com.esa.beuth.testdriveassist;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -14,7 +13,7 @@ import java.util.List;
 
 import lombok.NonNull;
 
-public class ConnectionOverviewActivity extends AppCompatActivity {
+public class ConnectionOverviewActivity extends SpeechActivity {
 
     private TextView tvOk;
     private TextView tvTest;

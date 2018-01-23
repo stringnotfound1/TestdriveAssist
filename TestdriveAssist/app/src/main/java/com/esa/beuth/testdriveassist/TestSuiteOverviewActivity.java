@@ -2,12 +2,9 @@ package com.esa.beuth.testdriveassist;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.esa.beuth.testdriveassist.global.Static;
 import com.esa.beuth.testdriveassist.gui.CustomTestSuiteSelect;
@@ -15,7 +12,7 @@ import com.esa.beuth.testdriveassist.gui.CustomTestSuiteSelect;
 import java.io.File;
 import java.util.ArrayList;
 
-public class TestSuiteOverviewActivity extends AppCompatActivity {
+public class TestSuiteOverviewActivity extends SpeechActivity {
 
 
     static final String TAG = "TestSuiteOverview";

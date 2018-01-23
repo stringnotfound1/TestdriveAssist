@@ -1,8 +1,6 @@
 package com.esa.beuth.testdriveassist;
 
 import android.speech.tts.TextToSpeech;
-import android.speech.tts.TextToSpeechService;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -10,7 +8,7 @@ import android.widget.TextView;
 
 import java.util.Locale;
 
-public class TestActivity extends AppCompatActivity implements TextToSpeech.OnInitListener{
+public class TestActivity extends SpeechActivity implements TextToSpeech.OnInitListener{
 
     private EditText etText;
     private TextView tvReadTTS;
