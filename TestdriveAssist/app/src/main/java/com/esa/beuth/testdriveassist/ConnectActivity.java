@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,12 +22,10 @@ public class ConnectActivity extends SpeechActivity {
 
     private LinearLayout llVarList;
     private TextView tvOk;
-    private TextView tvTest;
 
     private TextView tvIP;
     private TextView tvPort;
-
-
+    
     private Toast inputToast = null;
     private String inputText = "";
 
@@ -34,17 +34,11 @@ public class ConnectActivity extends SpeechActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connect);
 
-        setTitle(getString(R.string.title_input_connection));
-
-        llVarList = findViewById(R.id.ll_activity_connect);
         tvOk = findViewById(R.id.tv_activity_connect_ok);
-        tvTest = findViewById(R.id.tv_activity_connect_test);
-
         tvIP = findViewById(R.id.tv_activity_connect_IP);
         tvPort = findViewById(R.id.tv_activity_connect_port);
 
         tvOk.setOnClickListener(this::connectClicked);
-        tvTest.setOnClickListener(this::testClicked);
 
         Toast.makeText(getApplicationContext(), "started", Toast.LENGTH_SHORT).show();
 
@@ -75,14 +69,6 @@ public class ConnectActivity extends SpeechActivity {
             }
         }).start();
 
-//        Static.client = client;
-
         startActivity(new Intent(this, TestSuiteOverviewActivity.class));
-    }
-
-    private void testClicked(final @NonNull View view) {
-        CustomConnectVarElement customElement = new CustomConnectVarElement(this);
-        customElement.setText("Test");
-        llVarList.addView(customElement);
     }
 }
