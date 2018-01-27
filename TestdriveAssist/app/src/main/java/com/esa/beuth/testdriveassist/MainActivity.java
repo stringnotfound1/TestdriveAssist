@@ -45,8 +45,6 @@ public class MainActivity extends SpeechActivity {
 
     @Override
     protected void onResume() {
-
-
         super.onResume();
     }
 

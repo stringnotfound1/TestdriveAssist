@@ -24,6 +24,8 @@ public class Static {
 
     public static final String FILEPATH = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String XMLPATH = "/TestDriveAssist/files/XML/";
+    public static final String NOTESPATH = "/TestDriveAssist/files/notes/";
+    public static final String FILESPATH = "/TestDriveAssist/files/";
 
     public static final String TEST_NAME_EXTRA = "TEST_NAME_EXTRA";
     public static final String DATA_EXTRA = "DATA";
