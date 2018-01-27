@@ -11,7 +11,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".ConnectActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,7 +24,7 @@
             android:label="@string/title_activity_app"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ConnectionOverviewActivity" />
-        <activity android:name=".ConnectActivity" />
+        <!--<activity android:name=".ConnectActivity" />-->
         <activity android:name=".TestSuiteOverviewActivity" />
         <activity android:name=".TestAssistActivity" />
         <activity android:name=".TestActivity"></activity>

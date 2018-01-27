@@ -1,7 +1,9 @@
 package com.esa.beuth.testdriveassist;
 
+import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.ImageView;
@@ -17,8 +19,15 @@ import com.esa.beuth.testdriveassist.xml.TestStep;
 import com.esa.beuth.testdriveassist.xml.TestSuite;
 import com.esa.beuth.testdriveassist.xml.TestXmlParser;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import lombok.NonNull;
@@ -36,6 +45,7 @@ public class TestAssistActivity extends SpeechActivity {
 
     private TextView tvSpeed;
     private TextView tvSteeringAngle;
+    private FloatingActionButton fabNotes;
 
     private List<TestCase> testCases;
     private Map<TestStep, CustomTestStep> customTestSteps;
@@ -51,6 +61,9 @@ public class TestAssistActivity extends SpeechActivity {
         ll = findViewById(R.id.ll_activity_test_assist);
         tvSpeed = findViewById(R.id.tv_activity_test_assist_speed);
         tvSteeringAngle = findViewById(R.id.tv_activity_test_steering_angle);
+        fabNotes = findViewById(R.id.fab_test_assist_note);
+
+        fabNotes.setOnClickListener(view -> speechToText());
 
         Log.d(TAG, "FileName: " + getIntent().getStringExtra(Static.TEST_NAME_EXTRA));
 
@@ -114,5 +127,41 @@ public class TestAssistActivity extends SpeechActivity {
         if (parsedValue == null)
             parsedValue = stringValue;
         return parsedValue;
+    }
+
+    private void WriteTextFile(String text){
+
+        SimpleDateFormat s = new SimpleDateFormat("dd_MM_yyyy_HH:mm:ss", Locale.GERMAN);
+        String format = s.format(new Date());
+        final File file = new File(Static.FILEPATH + Static.NOTESPATH, "Notes_"+format+".txt");
+
+        try
+        {
+            file.createNewFile();
+            FileOutputStream fOut = new FileOutputStream(file);
+            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+            myOutWriter.append(text);
+
+            myOutWriter.close();
+
+            MediaScannerConnection.scanFile(this, new String[]{file.toString()}, null, null);
+
+            fOut.flush();
+            fOut.close();
+        }
+        catch (IOException  e)
+        {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+
+    }
+
+    @Override
+    protected void onSpeechInput(final @NonNull List<String> speech) {
+
+        for (String s : speech){
+            Log.d(TAG,"TTS: " + s);
+        }
+        WriteTextFile(speech.get(0));
     }
 }
