@@ -56,7 +56,7 @@ public class FapSimulator {
 
 	@Data
 	public class ValueDatabase {
-		private float acceleration;
+		private float velocity;
 		private float steeringAngle;
 		private boolean lights;
 		private int numDetectedPersons;

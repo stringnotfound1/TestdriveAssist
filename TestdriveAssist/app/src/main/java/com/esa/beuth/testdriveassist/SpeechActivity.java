@@ -24,7 +24,10 @@ public class SpeechActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        tts = new TextToSpeech(this, i -> ttsIsInitialized = i == 0);
+        tts = new TextToSpeech(this, i -> {
+            ttsIsInitialized = i == 0;
+            tts.setLanguage(Locale.getDefault());
+        });
         tts.setLanguage(Locale.ENGLISH);
     }
 

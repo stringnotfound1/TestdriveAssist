@@ -2,14 +2,12 @@
 <TestSuite>
 	<TestCase>
 		<TestStep type="weather" value="rain"/>
-		<TestStep type="acceleration" value="100"/>
-		<TestStep type="wait" value="2"/>
-		<TestStep type="turn" value="50" time="2" repeatable="true"/>		
+		<TestStep type="velocity" value="60" comparator="GREATER_EQUAL"/>
+		<TestStep type="steeringAngle" value="50" time="2000" comparator="GREATER"/>
 	</TestCase>
 	<TestCase>
-		<TestStep type="weather" value="rain"/>
-		<TestStep type="acceleration" value="100"/>
-		<TestStep type="wait" value="2"/>
-		<TestStep type="turn" value="30" time="2" repeatable="true"/>		
+		<TestStep type="weather" value="snow" comparator="EQUAL"/>
+		<TestStep type="velocity" value="100" comparator="LESS_EQUAL"/>
+		<TestStep type="steeringAngle" value="20" time="2000" comparator="LESS"/>
 	</TestCase>
 </TestSuite>

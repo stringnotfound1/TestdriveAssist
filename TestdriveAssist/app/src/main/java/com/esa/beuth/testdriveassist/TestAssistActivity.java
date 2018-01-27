@@ -2,14 +2,13 @@ package com.esa.beuth.testdriveassist;
 
 import android.media.MediaScannerConnection;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
+import android.os.CountDownTimer;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.esa.beuth.testdriveassist.global.Consumer;
 import com.esa.beuth.testdriveassist.global.Static;
@@ -36,21 +35,15 @@ public class TestAssistActivity extends SpeechActivity {
 
     private static final String TAG = "TestAssist";
 
-    private TextView tvReadTTS;
-    private TextToSpeech tts;
-    private boolean ttsIsInitialized;
-    private Toast inputToast = null;
-    private String inputText = "";
     private LinearLayout ll;
-
     private TextView tvSpeed;
     private TextView tvSteeringAngle;
     private FloatingActionButton fabNotes;
 
     private List<TestCase> testCases;
     private Map<TestStep, CustomTestStep> customTestSteps;
-
     private Consumer<String> listener;
+    private CountDownTimer timer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,37 +99,53 @@ public class TestAssistActivity extends SpeechActivity {
 
         TestStep testStep = testCase.getTestSteps().get(testStepIndex);
         listener = value -> {
-            if (!parseValue(value).equals(parseValue(testStep.getValue())))
+            if (timer != null) {
+                if (testStep.isConditionMet(value))
+                    return;
+                timer.cancel();
+                timer = null;
+                // TODO: informiere gui dass teststep fehlgeschlagen ist
                 return;
-            customTestSteps.get(testStep).setPassed();
-            textToSpeech("TestStep successful");
-            Static.unregisterForValue(listener);
-            test(testCasesIndex, testStepIndex + 1);
+            }
+            if (!testStep.isConditionMet(value))
+                return;
+            if (testStep.getTime() == null) {
+                onTestStepSuccessful(testCasesIndex, testStepIndex, testStep);
+                return;
+            }
+            timer = new CountDownTimer(testStep.getTime(), 500) {
+
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    // gui.setTimeLeft
+                }
+
+                @Override
+                public void onFinish() {
+                    // gui.resetProgressbar
+                    onTestStepSuccessful(testCasesIndex, testStepIndex, testStep);
+                }
+            };
+            timer.start();
         };
         Static.registerForValue(testStep.getType(), listener);
     }
 
-    private Object parseValue(final @NonNull String stringValue) {
-        Object parsedValue = null;
-        try {
-            parsedValue = Double.parseDouble(stringValue);
-        } catch (Exception e) {
-        }
-        if (stringValue.equals("true") || stringValue.equals("false"))
-            parsedValue = Boolean.parseBoolean(stringValue);
-        if (parsedValue == null)
-            parsedValue = stringValue;
-        return parsedValue;
+    private void onTestStepSuccessful(int testCasesIndex, int testStepIndex, TestStep testStep) {
+        customTestSteps.get(testStep).setPassed();
+        textToSpeech("TestStep successful");
+        Static.unregisterForValue(listener);
+        timer = null;
+        test(testCasesIndex, testStepIndex + 1);
     }
 
-    private void WriteTextFile(String text){
+    private void WriteTextFile(String text) {
 
         SimpleDateFormat s = new SimpleDateFormat("dd_MM_yyyy_HH:mm:ss", Locale.GERMAN);
         String format = s.format(new Date());
-        final File file = new File(Static.FILEPATH + Static.NOTESPATH, "Notes_"+format+".txt");
+        final File file = new File(Static.FILEPATH + Static.NOTESPATH, "Notes_" + format + ".txt");
 
-        try
-        {
+        try {
             file.createNewFile();
             FileOutputStream fOut = new FileOutputStream(file);
             OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
@@ -148,9 +157,7 @@ public class TestAssistActivity extends SpeechActivity {
 
             fOut.flush();
             fOut.close();
-        }
-        catch (IOException  e)
-        {
+        } catch (IOException e) {
             Log.e("Exception", "File write failed: " + e.toString());
         }
 
@@ -159,8 +166,8 @@ public class TestAssistActivity extends SpeechActivity {
     @Override
     protected void onSpeechInput(final @NonNull List<String> speech) {
 
-        for (String s : speech){
-            Log.d(TAG,"TTS: " + s);
+        for (String s : speech) {
+            Log.d(TAG, "TTS: " + s);
         }
         WriteTextFile(speech.get(0));
     }

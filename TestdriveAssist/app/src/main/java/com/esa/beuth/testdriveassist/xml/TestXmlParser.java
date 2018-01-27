@@ -39,6 +39,12 @@ public class TestXmlParser {
                         testStep.setTime(Long.parseLong(attributes.getNamedItem("time").getNodeValue()));
                     if (attributes.getNamedItem("repeatable") != null)
                         testStep.setRepeatable(Boolean.parseBoolean(attributes.getNamedItem("repeatable").getNodeValue()));
+                    if (attributes.getNamedItem("comparator") != null) {
+                        try {
+                            testStep.setComparator(Comparator.valueOf(attributes.getNamedItem("comparator").getNodeValue()));
+                        } catch (Exception e) {
+                        }
+                    }
                     break;
             }
             return current;
