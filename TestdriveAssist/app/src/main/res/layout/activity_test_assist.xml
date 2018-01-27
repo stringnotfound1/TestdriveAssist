@@ -9,10 +9,10 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/ll_activity_test_assist_data"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/ll_activity_test_assist_data">
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tvSpeedLabel"
@@ -44,10 +44,30 @@
 
     </LinearLayout>
 
+    <ProgressBar
+        android:id="@+id/pgb_activity_test_progess"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"
+        android:progress="0"
+        android:layout_below="@id/ll_activity_test_assist_data" />
+
+    <TextView
+        android:id="@+id/tv_activity_test_assist_progress_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_activity_test_assist_data"
+        android:textSize="26sp"
+        android:paddingTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:text=""
+        android:textColor="@color/white"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/ll_activity_test_assist_data">
+        android:layout_below="@id/pgb_activity_test_progess">
 
         <LinearLayout
             android:id="@+id/ll_activity_test_assist"

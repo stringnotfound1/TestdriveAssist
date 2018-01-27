@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.esa.beuth.testdriveassist.global.Consumer;
@@ -17,6 +18,8 @@ import com.esa.beuth.testdriveassist.xml.TestCase;
 import com.esa.beuth.testdriveassist.xml.TestStep;
 import com.esa.beuth.testdriveassist.xml.TestSuite;
 import com.esa.beuth.testdriveassist.xml.TestXmlParser;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,6 +42,8 @@ public class TestAssistActivity extends SpeechActivity {
     private TextView tvSpeed;
     private TextView tvSteeringAngle;
     private FloatingActionButton fabNotes;
+    private ProgressBar pgbProgress;
+    private TextView tvProgressLabel;
 
     private List<TestCase> testCases;
     private Map<TestStep, CustomTestStep> customTestSteps;
@@ -55,8 +60,11 @@ public class TestAssistActivity extends SpeechActivity {
         tvSpeed = findViewById(R.id.tv_activity_test_assist_speed);
         tvSteeringAngle = findViewById(R.id.tv_activity_test_steering_angle);
         fabNotes = findViewById(R.id.fab_test_assist_note);
+        pgbProgress = findViewById(R.id.pgb_activity_test_progess);
+        tvProgressLabel = findViewById(R.id.tv_activity_test_assist_progress_label);
 
         fabNotes.setOnClickListener(view -> speechToText());
+        pgbProgress.setScaleY(10);
 
         Log.d(TAG, "FileName: " + getIntent().getStringExtra(Static.TEST_NAME_EXTRA));
 
@@ -75,7 +83,10 @@ public class TestAssistActivity extends SpeechActivity {
                 ll.addView(iv);
                 for (TestStep testStep : testCase.getTestSteps()) {
                     CustomTestStep customTestStep = new CustomTestStep(this);
-                    customTestStep.setText(testStep.getType() + " " + testStep.getValue());
+                    if (testStep.getTime() == null)
+                        customTestStep.setText(testStep.getType() + " " + testStep.getValue());
+                    else
+                        customTestStep.setText(testStep.getType() + " " + testStep.getValue() + " " + getString(R.string.for_test_time)+ " " +(testStep.getTime()/1000)+" s");
                     ll.addView(customTestStep);
                     customTestSteps.put(testStep, customTestStep);
                 }
@@ -98,12 +109,15 @@ public class TestAssistActivity extends SpeechActivity {
         }
 
         TestStep testStep = testCase.getTestSteps().get(testStepIndex);
+        textToSpeech(testStep.getType() + " " + testStep.getValue());
         listener = value -> {
             if (timer != null) {
                 if (testStep.isConditionMet(value))
                     return;
                 timer.cancel();
                 timer = null;
+                pgbProgress.setProgress(0);
+                tvProgressLabel.setText("");
                 // TODO: informiere gui dass teststep fehlgeschlagen ist
                 return;
             }
@@ -117,15 +131,19 @@ public class TestAssistActivity extends SpeechActivity {
 
                 @Override
                 public void onTick(long millisUntilFinished) {
+                    pgbProgress.setMax(testStep.getTime().intValue());
+                    pgbProgress.setProgress(pgbProgress.getMax() - (int) millisUntilFinished);
                     // gui.setTimeLeft
                 }
 
                 @Override
                 public void onFinish() {
-                    // gui.resetProgressbar
+                    pgbProgress.setProgress(0);
+                    tvProgressLabel.setText("");
                     onTestStepSuccessful(testCasesIndex, testStepIndex, testStep);
                 }
             };
+            tvProgressLabel.setText(testStep.getType() + " " + testStep.getValue());
             timer.start();
         };
         Static.registerForValue(testStep.getType(), listener);
@@ -133,7 +151,7 @@ public class TestAssistActivity extends SpeechActivity {
 
     private void onTestStepSuccessful(int testCasesIndex, int testStepIndex, TestStep testStep) {
         customTestSteps.get(testStep).setPassed();
-        textToSpeech("TestStep successful");
+        textToSpeech(getString(R.string.test_step_success));
         Static.unregisterForValue(listener);
         timer = null;
         test(testCasesIndex, testStepIndex + 1);

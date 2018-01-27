@@ -13,4 +13,6 @@
     <string name="title_test_assist">Test Assist</string>
     <string name="activity_main_menu_2">Menü 2</string>
     <string name="activity_main_menu_1">Verbindung auswählen</string>
+    <string name="for_test_time">für</string>
+    <string name="test_step_success">Test Schritt erfolgreich</string>
 </resources>
