@@ -64,18 +64,15 @@ public class ConnectActivity extends SpeechActivity {
             Looper.prepare();
             try {
                 Log.d(TAG, "Try connection");
-//                client.start("192.168.178.47", 60000);
                 Static.client.start(tvIP.getText().toString(), Integer.parseInt(tvPort.getText().toString()));
                 Toast.makeText(getApplicationContext(), "client started", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "Connection success?");
+                Log.d(TAG, "Connection Success");
             } catch (Exception e) {
                 Toast.makeText(getApplicationContext(), "error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
                 Log.e(TAG, "Connection Error");
             }
         }).start();
-
-//        Static.client = client;
 
         startActivity(new Intent(this, TestSuiteOverviewActivity.class));
     }
