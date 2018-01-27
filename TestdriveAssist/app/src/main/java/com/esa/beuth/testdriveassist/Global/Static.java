@@ -40,33 +40,43 @@ public class Static {
     private static Map<String, String> values = new HashMap<>();
     private static Map<String, List<Consumer<String>>> valueListeners = new HashMap<>();
 
+    private static Object valueListenerLock = new Object();
+
     public static void setValue(final @NonNull String key, final String value) {
-        values.put(key, value);
-        if (!valueListeners.containsKey(key))
-            return;
-        for (Consumer<String> c : valueListeners.get(key))
-            c.accept(value);
+        synchronized (valueListenerLock) {
+            values.put(key, value);
+            if (!valueListeners.containsKey(key))
+                return;
+            for (Consumer<String> c : valueListeners.get(key))
+                c.accept(value);
+        }
     }
 
     public static Object getValue(final @NonNull String key) {
-        return values.get(key);
+        synchronized (valueListenerLock) {
+            return values.get(key);
+        }
     }
 
     public static void registerForValue(final @NonNull String key, final @NonNull Consumer<String> listener) {
-        if (!valueListeners.containsKey(key))
-            valueListeners.put(key, new LinkedList<>());
-        valueListeners.get(key).add(listener);
+        synchronized (valueListenerLock) {
+            if (!valueListeners.containsKey(key))
+                valueListeners.put(key, new LinkedList<>());
+            valueListeners.get(key).add(listener);
+        }
     }
 
     public static void unregisterForValue(final @NonNull Consumer<String> listener) {
-        String key = null;
-        for (Map.Entry<String, List<Consumer<String>>> entry : valueListeners.entrySet()) {
-            if (entry.getValue().contains(listener)) {
-                key = entry.getKey();
-                break;
+        synchronized (valueListenerLock) {
+            String key = null;
+            for (Map.Entry<String, List<Consumer<String>>> entry : valueListeners.entrySet()) {
+                if (entry.getValue().contains(listener)) {
+                    key = entry.getKey();
+                    break;
+                }
             }
+            if (key != null)
+                valueListeners.get(key).remove(listener);
         }
-        if (key != null)
-            valueListeners.get(key).remove(listener);
     }
 }
