@@ -86,15 +86,24 @@ public class TestAssistActivity extends SpeechActivity {
                     if (testStep.getTime() == null)
                         customTestStep.setText(testStep.getType() + " " + testStep.getValue());
                     else
-                        customTestStep.setText(testStep.getType() + " " + testStep.getValue() + " " + getString(R.string.for_test_time)+ " " +(testStep.getTime()/1000)+" s");
+                        customTestStep.setText(testStep.getType() + " " + testStep.getValue() + " " + getString(R.string.for_test_time) + " " + (testStep.getTime() / 1000) + " s");
                     ll.addView(customTestStep);
                     customTestSteps.put(testStep, customTestStep);
                 }
             }
-            test(0, 0);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onTtsCreated() {
+        test(0, 0);
+    }
+
+    @Override
+    protected void onTtsCreationFailed() {
+        test(0, 0);
     }
 
     private void test(int testCasesIndex, int testStepIndex) {
