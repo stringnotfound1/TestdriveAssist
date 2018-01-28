@@ -66,6 +66,7 @@ public class TestAssistActivity extends SpeechActivity {
         fabNotes.setOnClickListener(view -> speechToText());
         pgbProgress.setScaleY(10);
 
+
         Log.d(TAG, "FileName: " + getIntent().getStringExtra(Static.TEST_NAME_EXTRA));
 
         String fileName = getIntent().getStringExtra(Static.TEST_NAME_EXTRA);
@@ -84,9 +85,10 @@ public class TestAssistActivity extends SpeechActivity {
                 for (TestStep testStep : testCase.getTestSteps()) {
                     CustomTestStep customTestStep = new CustomTestStep(this);
                     if (testStep.getTime() == null)
-                        customTestStep.setText(testStep.getType() + " " + testStep.getValue());
+                        customTestStep.setText(testStep.getType() + " " + testStep.getComparator().toString().toLowerCase() + " " + testStep.getValue());
                     else
-                        customTestStep.setText(testStep.getType() + " " + testStep.getValue() + " " + getString(R.string.for_test_time) + " " + (testStep.getTime() / 1000) + " s");
+//                        customTestStep.setText(testStep.getType() + " " + testStep.getValue() + " " + getString(R.string.for_test_time) + " " + (testStep.getTime() / 1000) + " s");
+                        customTestStep.setText(testStep.getType() + " " + testStep.getComparator().toString().toLowerCase() + " " + testStep.getValue() + " " + " for " + (testStep.getTime() / 1000) + " s");
                     ll.addView(customTestStep);
                     customTestSteps.put(testStep, customTestStep);
                 }
@@ -118,7 +120,13 @@ public class TestAssistActivity extends SpeechActivity {
         }
 
         TestStep testStep = testCase.getTestSteps().get(testStepIndex);
-        textToSpeech(testStep.getType() + " " + testStep.getValue());
+
+        if (testStep.getTime() == null)
+            textToSpeech(testStep.getType() + " " + testStep.getComparator() + " " + testStep.getValue());
+        else
+            textToSpeech(testStep.getType() + " " + testStep.getComparator() + " " + testStep.getValue() + " " + " for " + (testStep.getTime() / 1000) + " seconds");
+
+
         listener = value -> {
             if (timer != null) {
                 if (testStep.isConditionMet(value))
@@ -152,7 +160,8 @@ public class TestAssistActivity extends SpeechActivity {
                     onTestStepSuccessful(testCasesIndex, testStepIndex, testStep);
                 }
             };
-            tvProgressLabel.setText(testStep.getType() + " " + testStep.getValue());
+            String labelText = testStep.getType() + " " + testStep.getComparator().toString().toLowerCase() + " "+ testStep.getValue()+ " " + " for " + (testStep.getTime() / 1000) + " s";
+            tvProgressLabel.setText(labelText);
             timer.start();
         };
         Static.registerForValue(testStep.getType(), listener);
@@ -160,7 +169,8 @@ public class TestAssistActivity extends SpeechActivity {
 
     private void onTestStepSuccessful(int testCasesIndex, int testStepIndex, TestStep testStep) {
         customTestSteps.get(testStep).setPassed();
-        textToSpeech(getString(R.string.test_step_success));
+//        textToSpeech(getString(R.string.test_step_success));
+        textToSpeech("Test step successful");
         Static.unregisterForValue(listener);
         timer = null;
         test(testCasesIndex, testStepIndex + 1);

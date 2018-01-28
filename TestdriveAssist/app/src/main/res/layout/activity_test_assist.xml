@@ -49,9 +49,10 @@
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/ll_activity_test_assist_data"
         android:minHeight="50dp"
         android:progress="0"
-        android:layout_below="@id/ll_activity_test_assist_data" />
+        android:progressTint="@color/green" />
 
     <TextView
         android:id="@+id/tv_activity_test_assist_progress_label"
