@@ -10,6 +10,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ public class MainActivity extends SpeechActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         ivMenu1 = findViewById(R.id.iv_activity_main_menu_1);
         ivMenu2 = findViewById(R.id.iv_activity_main_menu_2);

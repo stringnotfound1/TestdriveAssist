@@ -19,8 +19,6 @@ import com.esa.beuth.testdriveassist.xml.TestStep;
 import com.esa.beuth.testdriveassist.xml.TestSuite;
 import com.esa.beuth.testdriveassist.xml.TestXmlParser;
 
-import org.w3c.dom.Text;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -49,6 +47,8 @@ public class TestAssistActivity extends SpeechActivity {
     private Map<TestStep, CustomTestStep> customTestSteps;
     private Consumer<String> listener;
     private CountDownTimer timer;
+    private int currentTestCase = 0;
+    private int currentTestStep = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,12 +100,12 @@ public class TestAssistActivity extends SpeechActivity {
 
     @Override
     protected void onTtsCreated() {
-        test(0, 0);
+        test(currentTestCase, currentTestStep);
     }
 
     @Override
     protected void onTtsCreationFailed() {
-        test(0, 0);
+        test(currentTestCase, currentTestStep);
     }
 
     private void test(int testCasesIndex, int testStepIndex) {
@@ -120,6 +120,8 @@ public class TestAssistActivity extends SpeechActivity {
         }
 
         TestStep testStep = testCase.getTestSteps().get(testStepIndex);
+        currentTestCase = testCasesIndex;
+        currentTestStep = testStepIndex;
 
         if (testStep.getTime() == null)
             textToSpeech(testStep.getType() + " " + testStep.getComparator() + " " + testStep.getValue());
@@ -135,7 +137,6 @@ public class TestAssistActivity extends SpeechActivity {
                 timer = null;
                 pgbProgress.setProgress(0);
                 tvProgressLabel.setText("");
-                // TODO: informiere gui dass teststep fehlgeschlagen ist
                 return;
             }
             if (!testStep.isConditionMet(value))
@@ -150,7 +151,6 @@ public class TestAssistActivity extends SpeechActivity {
                 public void onTick(long millisUntilFinished) {
                     pgbProgress.setMax(testStep.getTime().intValue());
                     pgbProgress.setProgress(pgbProgress.getMax() - (int) millisUntilFinished);
-                    // gui.setTimeLeft
                 }
 
                 @Override
@@ -202,7 +202,6 @@ public class TestAssistActivity extends SpeechActivity {
 
     @Override
     protected void onSpeechInput(final @NonNull List<String> speech) {
-
         for (String s : speech) {
             Log.d(TAG, "TTS: " + s);
         }

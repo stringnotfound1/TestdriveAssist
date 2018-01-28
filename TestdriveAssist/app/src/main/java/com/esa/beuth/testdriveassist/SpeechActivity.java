@@ -22,24 +22,23 @@ public class SpeechActivity extends AppCompatActivity {
     private boolean ttsIsInitialized;
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         tts = new TextToSpeech(this, i -> {
             ttsIsInitialized = i == 0;
             if (ttsIsInitialized) {
                 tts.setLanguage(Locale.ENGLISH);
                 onTtsCreated();
-            }else{
+            } else {
                 onTtsCreationFailed();
             }
         });
-//        tts.setLanguage(Locale.ENGLISH);
     }
 
     protected void onTtsCreated() {
     }
 
-    protected void onTtsCreationFailed(){
+    protected void onTtsCreationFailed() {
     }
 
     protected void speechToText() {
@@ -68,8 +67,8 @@ public class SpeechActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
+    protected void onDestroy() {
+        super.onDestroy();
         tts.shutdown();
-        super.onStop();
     }
 }
