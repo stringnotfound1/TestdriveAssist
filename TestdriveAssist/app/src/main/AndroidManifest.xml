@@ -27,7 +27,6 @@
         <!--<activity android:name=".ConnectActivity" />-->
         <activity android:name=".TestSuiteOverviewActivity" />
         <activity android:name=".TestAssistActivity" />
-        <activity android:name=".TestActivity"></activity>
     </application>
 
 </manifest>
