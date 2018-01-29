@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.esa.beuth.testdriveassist.global.Static;
 import com.esa.beuth.testdriveassist.gui.CustomTestSuiteSelect;
@@ -42,7 +43,10 @@ public class TestSuiteOverviewActivity extends SpeechActivity {
             for (String s : xmlFileList){
                 CustomTestSuiteSelect vTestSelect= new CustomTestSuiteSelect(this);
                 vTestSelect.setText(s);
+                vTestSelect.setFileName(s);
                 vTestSelect.setOnClickListener(view -> startActivity(new Intent(this,TestAssistActivity.class).putExtra(Static.TEST_NAME_EXTRA,s)));
+                vTestSelect.getBtReset().setOnClickListener(view -> Toast.makeText(this, "RESET "+vTestSelect.getFileName(), Toast.LENGTH_SHORT).show());
+//                complete path to file: String completePath = "file://" + Static.FILEPATH + Static.XMLPATH + fileName;
                 llTestSuiteList.addView(vTestSelect);
             }
 
