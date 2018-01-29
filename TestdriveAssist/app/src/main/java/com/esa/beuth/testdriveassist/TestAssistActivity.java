@@ -6,6 +6,7 @@ import android.os.CountDownTimer;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -54,6 +55,7 @@ public class TestAssistActivity extends SpeechActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_assist);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setTitle(getString(R.string.title_test_assist));
 
         ll = findViewById(R.id.ll_activity_test_assist);
@@ -130,6 +132,7 @@ public class TestAssistActivity extends SpeechActivity {
 
 
         listener = value -> {
+            tvSpeed.setText(testStep.getType() + " : " + value);
             if (timer != null) {
                 if (testStep.isConditionMet(value))
                     return;
@@ -137,6 +140,15 @@ public class TestAssistActivity extends SpeechActivity {
                 timer = null;
                 pgbProgress.setProgress(0);
                 tvProgressLabel.setText("");
+                textToSpeech("Test Failed");
+                textToSpeech("Please repeat");
+//                TODO Code Duplikation vermeiden
+                if (testStep.getTime() == null)
+                    textToSpeech(testStep.getType() + " " + testStep.getComparator() + " " + testStep.getValue());
+                else
+                    textToSpeech(testStep.getType() + " " + testStep.getComparator() + " " + testStep.getValue() + " " + " for " + (testStep.getTime() / 1000) + " seconds");
+
+
                 return;
             }
             if (!testStep.isConditionMet(value))

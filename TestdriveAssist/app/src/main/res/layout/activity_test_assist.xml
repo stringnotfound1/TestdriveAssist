@@ -19,28 +19,32 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/speed" />
+            android:text="@string/speed"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_activity_test_assist_speed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="" />
+            android:textSize="26sp"
+            android:text=""/>
 
         <TextView
             android:id="@+id/tvSteeringAngleLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/steering_angle" />
+            android:text="@string/steering_angle"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_activity_test_steering_angle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="" />
+            android:text=""
+            android:visibility="gone" />
 
     </LinearLayout>
 
@@ -59,7 +63,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ll_activity_test_assist_data"
-        android:textSize="26sp"
+        android:textSize="22sp"
         android:paddingTop="10dp"
         android:layout_centerHorizontal="true"
         android:text=""
