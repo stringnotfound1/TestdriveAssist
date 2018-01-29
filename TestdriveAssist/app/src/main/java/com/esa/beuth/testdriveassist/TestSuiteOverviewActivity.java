@@ -9,9 +9,16 @@ import android.widget.Toast;
 
 import com.esa.beuth.testdriveassist.global.Static;
 import com.esa.beuth.testdriveassist.gui.CustomTestSuiteSelect;
+import com.esa.beuth.testdriveassist.xml.TestCase;
+import com.esa.beuth.testdriveassist.xml.TestStep;
+import com.esa.beuth.testdriveassist.xml.TestSuite;
+import com.esa.beuth.testdriveassist.xml.TestXmlParser;
+import com.esa.beuth.testdriveassist.xml.TestXmlWriter;
 
 import java.io.File;
 import java.util.ArrayList;
+
+import lombok.NonNull;
 
 public class TestSuiteOverviewActivity extends SpeechActivity {
 
@@ -35,40 +42,45 @@ public class TestSuiteOverviewActivity extends SpeechActivity {
 
         tvOk.setOnClickListener(view -> startActivity(new Intent(this, TestAssistActivity.class)));
 
-
 //        Toast.makeText(getApplicationContext(), "select Test", Toast.LENGTH_SHORT).show();
         listTestSuites();
 //        llTestSuiteList.addView();
-        if (xmlFileList.size()>0){
-            for (String s : xmlFileList){
-                CustomTestSuiteSelect vTestSelect= new CustomTestSuiteSelect(this);
-                vTestSelect.setText(s);
-                vTestSelect.setFileName(s);
-                vTestSelect.setOnClickListener(view -> startActivity(new Intent(this,TestAssistActivity.class).putExtra(Static.TEST_NAME_EXTRA,s)));
-                vTestSelect.getBtReset().setOnClickListener(view -> Toast.makeText(this, "RESET "+vTestSelect.getFileName(), Toast.LENGTH_SHORT).show());
-//                complete path to file: String completePath = "file://" + Static.FILEPATH + Static.XMLPATH + fileName;
-                llTestSuiteList.addView(vTestSelect);
-            }
-
+        for (String s : xmlFileList) {
+            CustomTestSuiteSelect vTestSelect = new CustomTestSuiteSelect(this);
+            vTestSelect.setText(s);
+            vTestSelect.setFileName(s);
+            vTestSelect.setOnClickListener(view -> startActivity(new Intent(this, TestAssistActivity.class).putExtra(Static.TEST_NAME_EXTRA, s)));
+            String completePath = Static.FILEPATH + Static.XMLPATH + vTestSelect.getFileName();
+            vTestSelect.getBtReset().setOnClickListener(view -> resetXmlFile(completePath));
+            llTestSuiteList.addView(vTestSelect);
         }
-
     }
 
-    private void listTestSuites(){
-
-        File xmlDir = new File(Static.FILEPATH+Static.XMLPATH);
-
-         if (xmlDir.listFiles().length > 0) {
-             for (File f : xmlDir.listFiles()) {
-                 if (f.getPath().endsWith("xml")) {
-                     xmlFileList.add(f.getName());
-                     Log.d(TAG, f.getAbsolutePath());
-                 }
-             }
-         }
-
-
-
+    private void listTestSuites() {
+        File xmlDir = new File(Static.FILEPATH + Static.XMLPATH);
+        if (xmlDir.listFiles().length > 0) {
+            for (File f : xmlDir.listFiles()) {
+                if (f.getPath().endsWith("xml")) {
+                    xmlFileList.add(f.getName());
+                    Log.d(TAG, f.getAbsolutePath());
+                }
+            }
+        }
     }
 
+    private void resetXmlFile(final @NonNull String path) {
+        try {
+            TestSuite suite = TestXmlParser.parse("file://" + path);
+            suite.setSuccessful(null);
+            for (TestCase testCase : suite.getTestCases()) {
+                testCase.setSuccessful(null);
+                for (TestStep testStep : testCase.getTestSteps())
+                    testStep.setSuccessful(null);
+            }
+            TestXmlWriter.write(path, suite);
+            Toast.makeText(getApplicationContext(), "TestSuite reset", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

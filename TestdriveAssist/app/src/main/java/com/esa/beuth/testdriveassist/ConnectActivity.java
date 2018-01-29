@@ -48,7 +48,6 @@ public class ConnectActivity extends SpeechActivity {
 
         tvOk.setOnClickListener(this::connectClicked);
 
-
         askStoragePermission();
         createDir(Static.XMLPATH);
         createDir(Static.NOTESPATH);
@@ -84,26 +83,22 @@ public class ConnectActivity extends SpeechActivity {
         startActivity(new Intent(this, TestSuiteOverviewActivity.class));
     }
 
-    private void askStoragePermission(){
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},2909);
-
-        }
+    private void askStoragePermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2909);
     }
 
-    private void createDir(String s){
+    private void createDir(String s) {
 
-        Log.d(TAG,"Create Dir: " + s);
+        Log.d(TAG, "Create Dir: " + s);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            Log.d(TAG,"Attempt to create Dir: " + s);
+            Log.d(TAG, "Attempt to create Dir: " + s);
             File sdCard = Environment.getExternalStorageDirectory();
-            File dir = new File(sdCard.getAbsolutePath() + s+"/dummy");
+            File dir = new File(sdCard.getAbsolutePath() + s + "/dummy");
             dir.mkdirs();
             MediaScannerConnection.scanFile(this, new String[]{dir.toString()}, null, null);
-            new File(sdCard.getAbsolutePath() + s+"/dummy").delete();
+            new File(sdCard.getAbsolutePath() + s + "/dummy").delete();
 
         }
 
@@ -111,10 +106,10 @@ public class ConnectActivity extends SpeechActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        Log.d(TAG, "onRequest "+permissions+" "+grantResults);
+        Log.d(TAG, "onRequest " + permissions + " " + grantResults);
         switch (requestCode) {
             case 2909: {
-                if (grantResults.length>0){
+                if (grantResults.length > 0) {
                     if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                         Log.e("Permission", "Granted");
                     } else {

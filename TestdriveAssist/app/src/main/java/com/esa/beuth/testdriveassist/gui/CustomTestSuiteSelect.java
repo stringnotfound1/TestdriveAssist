@@ -8,15 +8,17 @@ import android.widget.TextView;
 import com.esa.beuth.testdriveassist.R;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Created by Alex on 02.01.2018.
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class CustomTestSuiteSelect extends LinearLayout {
-    TextView tvTestName;
-    Button btReset;
-    String fileName;
+    private TextView tvTestName;
+    private Button btReset;
+    private String fileName;
 
     public CustomTestSuiteSelect(Context context) {
         super(context);

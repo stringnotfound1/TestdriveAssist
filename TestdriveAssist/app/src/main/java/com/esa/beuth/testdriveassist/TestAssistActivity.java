@@ -19,6 +19,7 @@ import com.esa.beuth.testdriveassist.xml.TestCase;
 import com.esa.beuth.testdriveassist.xml.TestStep;
 import com.esa.beuth.testdriveassist.xml.TestSuite;
 import com.esa.beuth.testdriveassist.xml.TestXmlParser;
+import com.esa.beuth.testdriveassist.xml.TestXmlWriter;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -44,10 +45,15 @@ public class TestAssistActivity extends SpeechActivity {
     private ProgressBar pgbProgress;
     private TextView tvProgressLabel;
 
+    private String writePath;
+    private TestSuite testSuite;
     private List<TestCase> testCases;
     private Map<TestStep, CustomTestStep> customTestSteps;
     private Consumer<String> listener;
     private CountDownTimer timer;
+    private boolean hasStarted = false;
+    private int startingTestCase = 0;
+    private int startingTestStep = 0;
     private int currentTestCase = 0;
     private int currentTestStep = 0;
 
@@ -73,41 +79,67 @@ public class TestAssistActivity extends SpeechActivity {
 
         String fileName = getIntent().getStringExtra(Static.TEST_NAME_EXTRA);
         String completePath = "file://" + Static.FILEPATH + Static.XMLPATH + fileName;
+        writePath = Static.FILEPATH + Static.XMLPATH + fileName;
 
         Log.d(TAG, "File Path: " + completePath);
 
         try {
-            TestSuite testSuite = TestXmlParser.parse(completePath);
-            customTestSteps = new LinkedHashMap<>();
-            testCases = testSuite.getTestCases();
-            for (TestCase testCase : testCases) {
-                ImageView iv = new ImageView(this);
-                iv.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.separator));
-                ll.addView(iv);
-                for (TestStep testStep : testCase.getTestSteps()) {
-                    CustomTestStep customTestStep = new CustomTestStep(this);
-                    if (testStep.getTime() == null)
-                        customTestStep.setText(testStep.getType() + " " + testStep.getComparator().toString().toLowerCase() + " " + testStep.getValue());
-                    else
-//                        customTestStep.setText(testStep.getType() + " " + testStep.getValue() + " " + getString(R.string.for_test_time) + " " + (testStep.getTime() / 1000) + " s");
-                        customTestStep.setText(testStep.getType() + " " + testStep.getComparator().toString().toLowerCase() + " " + testStep.getValue() + " " + " for " + (testStep.getTime() / 1000) + " s");
-                    ll.addView(customTestStep);
-                    customTestSteps.put(testStep, customTestStep);
-                }
-            }
+            testSuite = TestXmlParser.parse(completePath);
         } catch (Exception e) {
             e.printStackTrace();
+            return;
+        }
+
+        customTestSteps = new LinkedHashMap<>();
+        testCases = testSuite.getTestCases();
+        for (TestCase testCase : testCases) {
+            ImageView iv = new ImageView(this);
+            iv.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.separator));
+            ll.addView(iv);
+            for (TestStep testStep : testCase.getTestSteps()) {
+                CustomTestStep customTestStep = new CustomTestStep(this);
+                if (testStep.getSuccessful() != null && testStep.getSuccessful())
+                    customTestStep.setPassed();
+                if (testStep.getTime() == null)
+                    customTestStep.setText(testStep.getType() + " " + testStep.getComparator().toString().toLowerCase() + " " + testStep.getValue());
+                else
+                    customTestStep.setText(testStep.getType() + " " + testStep.getComparator().toString().toLowerCase() + " " + testStep.getValue() + " " + " for " + (testStep.getTime() / 1000) + " s");
+                ll.addView(customTestStep);
+                customTestSteps.put(testStep, customTestStep);
+            }
+        }
+        findStartIndices();
+    }
+
+    private void findStartIndices() {
+        int startingTestCaseLocal = 0;
+        int startingTestStepLocal;
+        for (TestCase testCase : testCases) {
+            startingTestStepLocal = 0;
+            for (TestStep testStep : testCase.getTestSteps()) {
+                if (testStep.getSuccessful() == null) {
+                    startingTestCase = startingTestCaseLocal;
+                    startingTestStep = startingTestStepLocal;
+                    return;
+                }
+                startingTestStepLocal++;
+            }
+            startingTestCaseLocal++;
         }
     }
 
     @Override
     protected void onTtsCreated() {
-        test(currentTestCase, currentTestStep);
+        if (!hasStarted) {
+            test(startingTestCase, startingTestStep);
+            hasStarted = true;
+        } else
+            test(currentTestCase, currentTestStep);
     }
 
     @Override
     protected void onTtsCreationFailed() {
-        test(currentTestCase, currentTestStep);
+        onTtsCreated();
     }
 
     private void test(int testCasesIndex, int testStepIndex) {
@@ -172,7 +204,7 @@ public class TestAssistActivity extends SpeechActivity {
                     onTestStepSuccessful(testCasesIndex, testStepIndex, testStep);
                 }
             };
-            String labelText = testStep.getType() + " " + testStep.getComparator().toString().toLowerCase() + " "+ testStep.getValue()+ " " + " for " + (testStep.getTime() / 1000) + " s";
+            String labelText = testStep.getType() + " " + testStep.getComparator().toString().toLowerCase() + " " + testStep.getValue() + " " + " for " + (testStep.getTime() / 1000) + " s";
             tvProgressLabel.setText(labelText);
             timer.start();
         };
@@ -181,11 +213,39 @@ public class TestAssistActivity extends SpeechActivity {
 
     private void onTestStepSuccessful(int testCasesIndex, int testStepIndex, TestStep testStep) {
         customTestSteps.get(testStep).setPassed();
+        testStep.setSuccessful(true);
+        updateSuccessfulStates();
 //        textToSpeech(getString(R.string.test_step_success));
         textToSpeech("Test step successful");
         Static.unregisterForValue(listener);
         timer = null;
+        TestXmlWriter.write(writePath, testSuite);
         test(testCasesIndex, testStepIndex + 1);
+    }
+
+    private void updateSuccessfulStates() {
+        for (TestCase testCase : testCases) {
+            Boolean successful = true;
+            for (TestStep testStep : testCase.getTestSteps()) {
+                if (testStep.getSuccessful() != null && !testStep.getSuccessful()) {
+                    successful = false;
+                    break;
+                }
+                if (testStep.getSuccessful() == null)
+                    successful = null;
+            }
+            testCase.setSuccessful(successful);
+        }
+
+        testSuite.setSuccessful(true);
+        for (TestCase testCase : testCases) {
+            if (testCase.getSuccessful() != null && !testCase.getSuccessful()) {
+                testSuite.setSuccessful(false);
+                break;
+            }
+            if (testCase.getSuccessful() == null)
+                testSuite.setSuccessful(null);
+        }
     }
 
     private void WriteTextFile(String text) {

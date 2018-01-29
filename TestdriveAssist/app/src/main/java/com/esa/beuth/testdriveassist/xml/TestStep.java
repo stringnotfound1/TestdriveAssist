@@ -1,5 +1,7 @@
 package com.esa.beuth.testdriveassist.xml;
 
+import com.berner.mattner.tools.xml.XmlTransient;
+
 import java.util.UUID;
 
 import lombok.Data;
@@ -7,7 +9,7 @@ import lombok.NonNull;
 
 @Data
 public class TestStep {
-    private final UUID customId = UUID.randomUUID();
+    private @XmlTransient final UUID customId = UUID.randomUUID();
     private Boolean successful;
     private String type;
     private String value;
